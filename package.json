@@ -1,7 +1,7 @@
 {
   "name": "eatwhere",
   "version": "1.0.0",
-  "description": "Restaurant Review Website",
+  "description": "Restaurant Review website",
   "main": "db-connection.js",
   "dependencies": {
     "bcrypt": "^5.0.0",

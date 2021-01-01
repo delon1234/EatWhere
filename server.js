@@ -1,6 +1,7 @@
 "use strict";
 
 const express = require("express");
+const bodyParser = require("body-parser");
 //Code for EatWhere
 var app = express();
 var host = "127.0.0.1";
