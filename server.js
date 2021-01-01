@@ -2,6 +2,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const routeUser = require("./routes/routeUser");
 //Code for EatWhere
 var app = express();
 var host = "127.0.0.1";
@@ -12,6 +13,7 @@ app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+routeUser.routeUser(app);
 
 function gotoIndex(req, res) {
     console.log(req.params);

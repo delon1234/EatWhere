@@ -1,6 +1,6 @@
 "use strict"
 
-class User{
+class UserAccount{
     constructor(id, user_name, password, email, first_name, last_name, gender, mobile_number, address, reviews_posted, profile_picture, activated, facebook_account_id, confirmed){
         this.id = id;
         this.user_name = user_name;

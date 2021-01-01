@@ -5,6 +5,8 @@ var UserAccountDBObject = new UserAccountDB(); // intialise an instance of UserA
 
 function routeUser(app)
 {
+    app.route("/login")
+        .post(UserAccountDBObject.createUserAccount);
     app.route("/profile/:id")
         .get(UserAccountDBObject.getUserProfile)
         .put(UserAccountDBObject.editUserProfile)

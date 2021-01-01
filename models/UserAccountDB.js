@@ -5,10 +5,10 @@ class UserAccountDB
 {
     createUserAccount(request, respond)
     {
-        var UserAccount = new UserAccount(null, request.body.user_name, request.body.password, request.body.email, request.body.firstname, request.body.lastname, request.body.gender, request.body.mobile_number, request.body.address, request.body.reviews_posted, request.body.profile_picture, request.body.activated, request.facebook_account_id, request.body.confirmed);
-        var sql = "INSERT INTO EatWhere.User_Accounts (User_Name, Password, Email, FirstName, LastName, Gender, Mobile_Number, Address, Reviews_Posted, Profile_Picture) VALUES (?,?,?,?,?,?,?,?,0,?)";
-        var values = [UserAccount.getUserName(), UserAccount.getPassword(), UserAccount.getEmail(), UserAccount.getFirstName(), 
-            UserAccount.getLastName(), UserAccount.getGender(), UserAccount.getMobileNumber(), UserAccount.getAddress(), UserAccount.getProfilePicture()];
+        var userAccount = new UserAccount(null, request.body.user_name, request.body.password, request.body.email, request.body.firstname, request.body.lastname, request.body.gender, request.body.mobile_number, request.body.address, 0, request.body.profile_picture, 1, request.facebook_account_id, 0);
+        var sql = "INSERT INTO EatWhere.User_Accounts (User_Name, Password_Hash, Email, FirstName, LastName, Gender, Mobile_Number, Address, Profile_Picture) VALUES (?,?,?,?,?,?,?,?,?)";
+        var values = [userAccount.getUserName(), userAccount.getPassword(), userAccount.getEmail(), userAccount.getFirstName(), 
+            userAccount.getLastName(), userAccount.getGender(), userAccount.getMobileNumber(), userAccount.getAddress(), userAccount.getProfilePicture()];
         db.query(sql, values, function(error, result){
             if (error){
                 throw error;
