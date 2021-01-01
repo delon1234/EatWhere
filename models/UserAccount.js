@@ -1,9 +1,9 @@
 "use strict"
 
-class users{
-    constructor(id, user_id, first_name, last_name, password, email, gender, mobile_number, address, reviews_posted, profile_picture, activated, facebook_account_id, confirmed){
+class User{
+    constructor(id, user_name, password, email, first_name, last_name, gender, mobile_number, address, reviews_posted, profile_picture, activated, facebook_account_id, confirmed){
         this.id = id;
-        this.user_id = user_id;
+        this.user_name = user_name;
         this.first_name = first_name;
         this.last_name = last_name;
         this.password = password;
@@ -20,8 +20,8 @@ class users{
     getId(){
         return this.id;
     }
-    getUserId(){
-        return this.user_id;
+    getUserName(){
+        return this.user_name;
     }
     getFirstName(){
         return this.first_name;
