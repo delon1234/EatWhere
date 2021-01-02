@@ -10,4 +10,21 @@ class Restaurant
         this.neighbourhood = neighbourhood;
         this.website = website;
     }
+    getName(){
+        return this.name;
+    }
+    getLocation(){
+        return this.location;
+    }
+    getTelephone_Number(){
+        return this.telephone_number;
+    }
+    getNeighbourhood(){
+        return this.neighbourhood;
+    }
+    getWebsite(){
+        return this.website;
+    }
+
 }
+module.exports = Restaurant;
