@@ -1,19 +1,49 @@
 "use strict"
 var db = require("../db-connection");
 const UserAccount = require("../models/UserAccount");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 class UserAccountDB 
 {
+
     createUserAccount(request, respond)
     {
-        var userAccount = new UserAccount(null, request.body.user_name, request.body.password, request.body.email, request.body.firstname, request.body.lastname, request.body.gender, request.body.mobile_number, request.body.address, 0, request.body.profile_picture, 1, request.body.facebook_account_id, 0);
-        var sql = "INSERT INTO EatWhere.User_Accounts (User_Name, Password_Hash, Email, FirstName, LastName, Gender, Mobile_Number, Address, Profile_Picture, Facebook_Account_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
-        var values = [userAccount.getUserName(), userAccount.getPassword(), userAccount.getEmail(), userAccount.getFirstName(), 
-            userAccount.getLastName(), userAccount.getGender(), userAccount.getMobileNumber(), userAccount.getAddress(), userAccount.getProfilePicture(), userAccount.getFacebookAccountID()];
-        db.query(sql, values, function(error, result){
+        bcrypt.hash(request.body.password, saltRounds, function(err, hash) 
+        {
+            // Store hash in your password DB.
+            var userAccount = new UserAccount(null, request.body.user_name, hash, request.body.email, request.body.firstname, request.body.lastname, request.body.gender, request.body.mobile_number, request.body.address, 0, request.body.profile_picture, 1, request.body.facebook_account_id, 0);
+            var sql = "INSERT INTO EatWhere.User_Accounts (User_Name, Password_Hash, Email, FirstName, LastName, Gender, Mobile_Number, Address, Profile_Picture, Facebook_Account_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            var values = [userAccount.getUserName(), userAccount.getPassword(), userAccount.getEmail(), userAccount.getFirstName(), 
+                userAccount.getLastName(), userAccount.getGender(), userAccount.getMobileNumber(), userAccount.getAddress(), userAccount.getProfilePicture(), userAccount.getFacebookAccountID()];
+            db.query(sql, values, function(error, result){
+                if (error){
+                    throw error;
+                }
+                else{
+                    respond.json(result);
+                }
+            });
+        });
+    }
+    getLoginDetails(request, respond){
+        var user_name = request.body.username;
+        var password = request.body.password;
+        var sql = "SELECT CAST(Password_Hash as CHAR) AS password FROM EatWhere.User_Accounts WHERE User_Name = ?";
+        //Convert Password_Hash from Binary to CHAR and change the output field name to password
+        db.query(sql, [user_name], function(error, result){
             if (error){
                 throw error;
             }
             else{
+                // Compares plaintext password in json with password_hash stored in database
+                bcrypt.compare(password, result[0].password, function(err, result) {
+                    if (result == true){ // if passwords matches/login successful
+                        console.log("Success");
+                    }
+                    else{
+                        console.log("Invalid"); //login unsucessful as passwords do not match
+                    }
+                });
                 respond.json(result);
             }
         });
