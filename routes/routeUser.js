@@ -5,12 +5,15 @@ var UserAccountDBObject = new UserAccountDB(); // intialise an instance of UserA
 
 function routeUser(app)
 {
-    app.route("/login")
+    app.route("/register")
         .post(UserAccountDBObject.createUserAccount);
+    app.route("/login/:id")
+        .put(UserAccountDBObject.activateAccount);
     app.route("/profile/:id")
         .get(UserAccountDBObject.getUserProfile)
-        .put(UserAccountDBObject.editUserProfile)
-        .put(UserAccountDBObject.deactivateAccount)
+        .put(UserAccountDBObject.editAccountDetails)
         .delete(UserAccountDBObject.deleteAccount);
+    app.route("/deactivateprofile/:id")
+        .put(UserAccountDBObject.deactivateAccount);
 }
 module.exports = {routeUser};
