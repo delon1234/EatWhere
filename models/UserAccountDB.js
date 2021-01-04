@@ -3,6 +3,8 @@ var db = require("../db-connection");
 const UserAccount = require("../models/UserAccount");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+var jwt = require("jsonwebtoken");
+var secret = "secretkey"
 class UserAccountDB 
 {
 
@@ -39,12 +41,15 @@ class UserAccountDB
                 bcrypt.compare(password, result[0].password, function(err, result) {
                     if (result == true){ // if passwords matches/login successful
                         console.log("Success");
+                        var token = jwt.sign(user_name, secret);
+                        //console.log(result[0].password);
+                        respond.json({token: token});
                     }
                     else{
                         console.log("Invalid"); //login unsucessful as passwords do not match
                     }
                 });
-                respond.json(result);
+                //respond.json(result);
             }
         });
     }
@@ -63,22 +68,29 @@ class UserAccountDB
     }
     editAccountDetails(request, respond)
     {
-        bcrypt.hash(request.body.password, saltRounds, function(err, hash){
-            var userObject = new UserAccount(request.params.id, request.body.user_name, hash, request.body.email, request.body.firstname, request.body.lastname, 
-                request.body.gender, request.body.mobile_number, request.body.address, 
-                null, request.body.profile_picture, 1, null, null);
-            var sql = "UPDATE EatWhere.User_Accounts SET User_Name = ?, Password_Hash = ? , FirstName= ?, LastName = ?, Email = ?, Gender = ?, Mobile_Number = ?, Address = ?, Profile_Picture = ? WHERE User_ID = ?";
-            var values = [userObject.getUserName(), userObject.getPassword(), userObject.getFirstName(), userObject.getLastName(), userObject.getEmail(), userObject.getGender(), 
-                userObject.getMobileNumber(), userObject.getAddress(), userObject.getProfilePicture(), userObject.getId()];
-            db.query(sql, values, function(error, result){
-                if (error){
-                    throw error;
-                }
-                else{
-                    respond.json(result);
-                }
+        var token = request.body.token;
+        try {
+            var decoded = jwt.verify(token, secret);
+            bcrypt.hash(request.body.password, saltRounds, function(err, hash){
+                var userObject = new UserAccount(request.params.id, request.body.user_name, hash, request.body.email, request.body.firstname, request.body.lastname, 
+                    request.body.gender, request.body.mobile_number, request.body.address, 
+                    null, request.body.profile_picture, 1, null, null);
+                var sql = "UPDATE EatWhere.User_Accounts SET User_Name = ?, Password_Hash = ? , FirstName= ?, LastName = ?, Email = ?, Gender = ?, Mobile_Number = ?, Address = ?, Profile_Picture = ? WHERE User_ID = ?";
+                var values = [userObject.getUserName(), userObject.getPassword(), userObject.getFirstName(), userObject.getLastName(), userObject.getEmail(), userObject.getGender(), 
+                    userObject.getMobileNumber(), userObject.getAddress(), userObject.getProfilePicture(), userObject.getId()];
+                db.query(sql, values, function(error, result){
+                    if (error){
+                        throw error;
+                    }
+                    else{
+                        respond.json(result);
+                    }
+                });
             });
-        });
+        } catch (err) {
+            respond.json({result: "Invalid token!" });
+        }
+        
         
     }
     deleteAccount(request, respond)
