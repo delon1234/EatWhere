@@ -12,7 +12,6 @@ class UserAccountDB
     {
         bcrypt.hash(request.body.password, saltRounds, function(err, hash) 
         {
-            // Store hash in your password DB.
             var userAccount = new UserAccount(null, request.body.user_name, hash, request.body.email, request.body.firstname, request.body.lastname, request.body.gender, request.body.mobile_number, request.body.address, 0, request.body.profile_picture, 1, request.body.facebook_account_id, 0);
             var sql = "INSERT INTO EatWhere.User_Accounts (User_Name, Password_Hash, Email, FirstName, LastName, Gender, Mobile_Number, Address, Profile_Picture, Facebook_Account_ID) VALUES (?,?,?,?,?,?,?,?,?,?)";
             var values = [userAccount.getUserName(), userAccount.getPassword(), userAccount.getEmail(), userAccount.getFirstName(), 
