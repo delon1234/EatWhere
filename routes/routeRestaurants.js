@@ -9,6 +9,8 @@ function routeRestaurants(app){
         .post(RestaurantsDBObject.searchOrFilterRestaurants);
     app.route("/restaurants/all")
         .get(RestaurantsDBObject.getAllRestaurants)
+    app.route("/restaurants/:restaurant_id")
+        .get(RestaurantsDBObject.getOpeningHoursForRestaurant);
     
 }
 module.exports = {routeRestaurants};

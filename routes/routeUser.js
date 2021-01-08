@@ -9,7 +9,7 @@ function routeUser(app)
         .post(UserAccountDBObject.createUserAccount);
     app.route("/login")
         .get(UserAccountDBObject.getLoginDetails);
-    app.route("/login/:id")
+    app.route("/activateaccount/:id")
         .put(UserAccountDBObject.activateAccount);
     app.route("/profile/:id")
         .get(UserAccountDBObject.getUserProfile)

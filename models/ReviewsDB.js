@@ -28,6 +28,7 @@ class ReviewsDB
           });
     }
     postReview(request, respond){
+        var reviewid;
         var now = new Date();
         var reviewObject = new Review(null, request.params.restaurant_id, request.body.userid, request.body.review, request.body.rating, now.toString());
         var sql = "INSERT INTO EatWhere.reviews(Restaurant_ID, User_ID, Review, Rating, Date_Posted) VALUES(?, ?, ?, ?, NOW())"
@@ -38,6 +39,18 @@ class ReviewsDB
             }
             else{
                 respond.json(result);
+                reviewid = result.insertId;
+                var insertImage = "INSERT INTO EatWhere.reviewimages (Review_ID, Review_Image) VALUES (?,?)";
+                for (let i = 0; i < request.body.reviewimages.length; i++){
+                    db.query(insertImage, [reviewid, request.body.reviewimages[i]], function (error, result) {
+                        if(error){
+                            throw error;
+                        }
+                        else{
+                            respond.json(result);
+                        }
+                    });
+                }
             }
           });
     }
