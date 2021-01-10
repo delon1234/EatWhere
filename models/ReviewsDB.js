@@ -46,9 +46,9 @@ class ReviewsDB
                         if(error){
                             throw error;
                         }
-                        else{
+                        /*else{
                             respond.json(result);
-                        }
+                        }*/
                     });
                 }
             }
@@ -66,8 +66,20 @@ class ReviewsDB
             }
             else{
                 respond.json(result);
+                var updateReviewImages = "UPDATE EatWhere.reviewimages SET reviewimages.review_image = ? WHERE reviewimages.reviewimages_id = ?";
+                for (let i = 0; i < request.body.reviewimages.length; i++){
+                    db.query(updateReviewImages, [request.body.reviewimages[i], request.body.reviewimages_id[i]], function (error, result) {
+                        if(error){
+                            throw error;
+                        }
+                        /*else{
+                            respond.json(result);
+                        }*/
+                    });
+                }
             }
                   });
+
     }
     deleteReview(request, respond){
         var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ? AND User_ID = ?";
@@ -81,6 +93,7 @@ class ReviewsDB
             }
           });
     }
+
 
 }
 module.exports = ReviewsDB;
