@@ -8,8 +8,6 @@ function routeReviews(app){
     app.route("/restaurants/:restaurant_id/reviews/:review_id")
         .put(reviewsDBObject.editReview)
         .delete(reviewsDBObject.deleteReview);
-    app.route("/restaurants/:restaurant_id/reviews/:review_id/uploadImages")
-        // .post(reviewsDBObject.)
-        // .put(reviewsDBObject.);
+         
 }
 module.exports = {routeReviews};
