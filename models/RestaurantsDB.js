@@ -1,5 +1,4 @@
 "use strict"
-const { response } = require("express");
 var db = require("../db-connection");
 const Neighbourhood = require("./Neighbourhood");
 class RestaurantsDB
@@ -75,7 +74,6 @@ class RestaurantsDB
         }
         sql += grp;
         sql += "; SELECT Restaurants.Restaurant_ID, AVG(Rating) AS AverageRating, COUNT(Rating) AS Review_No FROM Restaurants LEFT JOIN reviews ON Restaurants.Restaurant_ID = Reviews.Restaurant_ID GROUP BY Restaurant_ID";
-        console.log(sql);
         db.query(sql, function (error, result) {
             if (error) {
                 throw error;
