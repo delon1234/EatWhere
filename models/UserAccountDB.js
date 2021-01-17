@@ -27,7 +27,7 @@ class UserAccountDB
         });
     }
     getLoginDetails(request, respond){
-        var user_name = request.body.username;
+        var user_name = request.body.user_name;
         var password = request.body.password;
         var sql = "SELECT User_ID, CAST(Password_Hash as CHAR) AS password FROM EatWhere.User_Accounts WHERE User_Name = ?";
         //Convert Password_Hash from Binary to CHAR and change the output field name to password

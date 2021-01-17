@@ -10,36 +10,9 @@
     <!-- Font Awesome Embedding of Icons -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <link rel="stylesheet" href="css/mystyles.css"> <!-- adding custom stylesheet after bootstrap style allows us to render the custom style properly as we can overide some styles defined in Bootstrap-->
-    <title>EatWhere</title>
-    <script src="js/restaurants.js"></script>
-    <script src="js/reviews.js"></script>
+    <title>Sign Up for EatWhere</title>
 </head>
-<body onload= "getRestaurantsData()">
-    <div w3-include-html = "top-navigation.html"></div>
-    <div class="container">
-        <h1>EatWhere</h1>
-        <h2>Discover the best restaurants nearby</h2>
-        <div class="row searchbar">
-                <div class="col-md-4">
-                    <input class="search-neighbourhood" type="text" placeholder="Singapore">
-                </div>
-                <div class="col-md-8">
-                    <input class="search-txt" type="text" placeholder="Search for a restaurant or a cuisine">
-                    <a class="search-btn" href="search.html">
-                        <i class="fas fa-search"></i>
-                    </a>
-                </div>
-        </div>
-        <h3>or</h3>
-        <button class="btn btn-dark">
-            <a href="restaurants.html">See all restaurants here</a>
-        </button>
-    </div>
+<body>
     
 </body>
-<script src="js/w3.js"></script>
-<script>
-        //to bring in other HTML on the fly into this page
-        w3.includeHTML();
-</script>
 </html>
