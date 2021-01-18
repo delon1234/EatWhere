@@ -39,7 +39,8 @@ class ReviewsDB
             }
             else{
                 respond.json(result);
-                reviewid = result.insertId;
+                //exclude review images for now. It works btw but havent implement for website
+                /*reviewid = result.insertId;
                 var insertImage = "INSERT INTO EatWhere.reviewimages (Review_ID, Review_Image) VALUES (?,?)";
                 for (let i = 0; i < request.body.reviewimages.length; i++){
                     db.query(insertImage, [reviewid, request.body.reviewimages[i]], function (error, result) {
@@ -49,16 +50,19 @@ class ReviewsDB
                         /*else{
                             respond.json(result);
                         }*/
-                    });
-                }
+                    //});
+                //}
             }
           });
     }
     editReview(request, respond){
         var now = new Date();
-        var reviewObject = new Review(request.params.review_id, request.params.restaurant_id, request.body.userid, request.body.review, request.body.rating, now.toString());
+        //for project part 4 havent verify userid
+      /*var reviewObject = new Review(request.params.review_id, request.params.restaurant_id, request.body.userid, request.body.review, request.body.rating, now.toString());
         var sql = "UPDATE EatWhere.Reviews SET Review = ?, Rating = ?, Date_Posted = NOW() WHERE Review_ID = ? AND User_ID = ?";
-        var values = [reviewObject.getReview(), reviewObject.getRating(), reviewObject.getId(), reviewObject.getUser_ID()];
+        var values = [reviewObject.getReview(), reviewObject.getRating(), reviewObject.getId(), reviewObject.getUser_ID()];*/
+        var sql = "UPDATE EatWhere.Reviews SET Review = ?, Rating = ?, Date_Posted = NOW() WHERE Review_ID = ?";
+        var values = [request.body.Review, request.body.rating, request.params.review_id];
         db.query(sql, values, function (error, result) 
         {
             if(error){
@@ -66,7 +70,8 @@ class ReviewsDB
             }
             else{
                 respond.json(result);
-                var updateReviewImages = "UPDATE EatWhere.reviewimages SET reviewimages.review_image = ? WHERE reviewimages.reviewimages_id = ?";
+                // for project part 4, havent implement update reviewimages
+                /*var updateReviewImages = "UPDATE EatWhere.reviewimages SET reviewimages.review_image = ? WHERE reviewimages.reviewimages_id = ?";
                 for (let i = 0; i < request.body.reviewimages.length; i++){
                     db.query(updateReviewImages, [request.body.reviewimages[i], request.body.reviewimages_id[i]], function (error, result) {
                         if(error){
@@ -75,15 +80,18 @@ class ReviewsDB
                         /*else{
                             respond.json(result);
                         }*/
-                    });
-                }
+                    //});
+                //}
             }
                   });
 
     }
     deleteReview(request, respond){
-        var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ? AND User_ID = ?";
-        var values = [request.params.review_id, request.body.userid]
+        //var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ? AND User_ID = ?";
+        //later change back to userid = ? . This is for project part 3
+        var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ?";
+        //var values = [request.params.review_id, request.body.userid]
+        var values = [request.params.review_id];
         db.query(sql, values, function (error, result) {
             if(error){
                 throw error;

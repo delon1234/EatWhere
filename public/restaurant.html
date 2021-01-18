@@ -8,9 +8,12 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Font Awesome Embedding of Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <script src="js/restaurants.js"></script>
     <script src="js/app.js"></script>
     <script src="js/reviews.js"></script>
+    <script src="js/account.js"></script>
 </head>
 <body onload="getRestaurantsDataForRestaurant()">
     <h1 id="name"></h1>
@@ -43,7 +46,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <button type="button" class="btn btn-primary">Post Review</button>
+            <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#postReviewModal' data-dismiss='modal'>Post Review</button>
             </div>
             <div class="modal-body" id="reviewsarea">
             
@@ -53,11 +56,12 @@
         </div>
         </div>
     </div>
-    
+    <div w3-include-html = "post-review-modal.html"></div>
+    <div w3-include-html = "edit-review-modal.html"></div>
 </body>
-<!-- <script src="js/w3.js"></script>
+<script src="js/w3.js"></script>
 <script>
         //to bring in other HTML on the fly into this page
         w3.includeHTML();
-</script> -->
+</script>
 </html>

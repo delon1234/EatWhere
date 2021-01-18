@@ -1,0 +1,27 @@
+<div class="modal fade" id="postReviewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Post Review</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="editreviewarea">
+          <form>
+            <div class="form-group">
+              <label for="postReviewRating">Rating</label>
+              <input id="postReviewRating">
+            </div>
+            <div class="form-group">
+              <label for="postReview">Review Content:</label>
+              <textarea class="form-control" id="postReview" rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="postReview()">Post Review</button>;
+        </div>
+      </div>
+    </div>
+  </div>

@@ -37,8 +37,9 @@ function displayRestaurants(){
                 break;
             }
         }
-        var listing = `<div onclick = "gotoRestaurantDetails(this)" item="${i}">
-                            <img src="${frontimg}">
+        var listing = `<div onclick = "gotoRestaurantDetails(this)" style="border-style: solid;
+        border-width: 5px;"item="${i}">
+                            <img src="${frontimg}" style="width:200px;height:200px">
                             <h2>${restaurants[i].Name}</h2>
                         </div>`;
         document.getElementById("restaurantscontainer").insertAdjacentHTML("beforeend", listing);

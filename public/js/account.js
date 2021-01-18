@@ -43,6 +43,7 @@ function login(){
         tokenandId = JSON.parse(request.responseText);
         console.log(tokenandId);
         id = tokenandId.userid;
+        localStorage.setItem("user_id", id);
         // need to store token somewhere as well like in the browser cookies
         token = tokenandId.token;
         //close modal and change top-navigation(remove login and sign up)
