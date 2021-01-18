@@ -45,6 +45,7 @@ function login(){
         id = tokenandId.userid;
         // need to store token somewhere as well like in the browser cookies
         token = tokenandId.token;
+        //close modal and change top-navigation(remove login and sign up)
         getprofile(id); // if successful login, get profile
     }
     request.setRequestHeader("Content-Type", "application/json");
