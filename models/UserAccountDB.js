@@ -36,6 +36,7 @@ class UserAccountDB
                 throw error;
             }
             else{
+                
                 // Compares plaintext password in json with password_hash stored in database
                 var userid = result[0].User_ID;
                 bcrypt.compare(password, result[0].password, function(err, result) {

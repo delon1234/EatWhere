@@ -1,4 +1,4 @@
-const Neighbourhood = require("../../models/Neighbourhood");
+
 
 function fetchNeighbourhoodsCuisinesCategories(){
     var request = new XMLHttpRequest();
