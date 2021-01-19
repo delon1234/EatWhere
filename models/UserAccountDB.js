@@ -43,11 +43,12 @@ class UserAccountDB
                     if (result == true){ // if passwords matches/login successful
                         console.log("Success");
                         var token = jwt.sign(user_name, secret);
-                        respond.json({token: token, userid: userid});
+                        respond.json({token: token, userid: userid, result: "Valid"});
                         
                     }
                     else{
                         console.log("Invalid"); //login unsucessful as passwords do not match
+                        respond.json({result: "Invalid"})
                     }
                 });
                 //respond.json(result);

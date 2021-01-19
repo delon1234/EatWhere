@@ -41,13 +41,19 @@ function login(){
     request.open("POST", "/login", true);
     request.onload = function(){
         tokenandId = JSON.parse(request.responseText);
+        if (tokenandId.result == "Invalid"){
+            window.alert("Login is not successful, please try again.");
+        }
+        else {
+            id = tokenandId.userid;
+            localStorage.setItem("user_id", id);
+            // need to store token somewhere as well like in the browser cookies
+            token = tokenandId.token;
+            //close modal and change top-navigation(remove login and sign up)
+            getprofile(id); // if successful login, get profile
+        }
+        console.log(request.responseText);
         console.log(tokenandId);
-        id = tokenandId.userid;
-        localStorage.setItem("user_id", id);
-        // need to store token somewhere as well like in the browser cookies
-        token = tokenandId.token;
-        //close modal and change top-navigation(remove login and sign up)
-        getprofile(id); // if successful login, get profile
     }
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(user));
