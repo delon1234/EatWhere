@@ -10,12 +10,13 @@ function getAllReviews(){
         reviewsarea.textContent = "";
         reviews = JSON.parse(request.responseText);
         for (var i = 0; i < reviews.length; i++){
+            var d = new Date(reviews[i].Date_Posted);
             var cell = `<div class="container" style="margin-top:50px">
                             <div>index ${i}</div>
                             <div id = "name${i}">User ID:${reviews[i].User_Name}</div>
                             <div id = "reviews_posted${i}">Contributed ${reviews[i].Reviews_Posted} Reviews</div>
                             <div id = "review${i}">${reviews[i].Review}</div>
-                            <div id = "date_posted${i}">Date Posted:${reviews[i].Date_Posted}</div>
+                            <div id = "date_posted${i}">Date Posted:${d.toString()}</div>
                             <div>Rating: ${reviews[i].rating}</div>
                             <i class="fas fa-trash" item="${i}"onClick='deleteReviewRequest(this)'></i>
                             <i class="fas fa-edit" item="${i}" onClick = "editReviewRequest(this)" data-toggle='modal' data-target='#editReviewModal' data-dismiss='modal'></i>
