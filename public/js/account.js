@@ -50,6 +50,12 @@ function login(){
             // need to store token somewhere as well like in the browser cookies
             token = tokenandId.token;
             //close modal and change top-navigation(remove login and sign up)
+            if (localStorage.getItem("user_id") != null){
+            var loginbutton = document.getElementById("login");
+            var signupbutton = document.getElementById("sign up");
+            loginbutton.style.display = "none";
+            signupbutton.style.display = "none";
+            }
             getprofile(id); // if successful login, get profile
         }
         console.log(request.responseText);

@@ -12,7 +12,6 @@ function getAllReviews(){
         for (var i = 0; i < reviews.length; i++){
             var d = new Date(reviews[i].Date_Posted);
             var cell = `<div class="container" style="margin-top:50px">
-                            <div>index ${i}</div>
                             <div id = "name${i}">User ID:${reviews[i].User_Name}</div>
                             <div id = "reviews_posted${i}">Contributed ${reviews[i].Reviews_Posted} Reviews</div>
                             <div id = "review${i}">${reviews[i].Review}</div>

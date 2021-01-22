@@ -11,10 +11,10 @@
       <div class="collapse navbar-collapse order-2" id="navbarNav">
         <ul class="nav navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" href="#loginModal">Login</a>
+            <a class="nav-link" id = "login" data-toggle="modal" href="#loginModal">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="register.html">Sign Up</a>
+            <a class="nav-link" id = "sign up" href="register.html">Sign Up</a>
           </li>
         </ul>
       </div>
@@ -25,24 +25,22 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form method="GET">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">EatWhere</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-header d-block">
+          <button type="button" class="close float-right" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
+          <h5 class="modal-title text-center" id="exampleModalLabel">EatWhere</h5>
         </div>
         <div class="modal-body">
-          <input name="username"id="username" placeholder="Username">
-          <input name="password"id="password" placeholder="Password">
-          <a href="">Forget Password?</a>
-          <btn>Sign in</btn>
+          <form>
+          <input class = "logininput" name="username"id="username" placeholder="Username">
+          <input class = "logininput" name="password"id="password" placeholder="Password">
+          <a class="align" href="">Forget Password?</a>
+          <button type="button"onclick="login()" style="position: absolute; right: 100px">Login</button>
           <div class="line"><span>or</span></div>
           <!-- Facebook login button-->
           <a href="register.html">No account? Click here to sign up!</a>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" onclick="login()">Login</button>
+          </form>
         </div>
       </form>
     </div>

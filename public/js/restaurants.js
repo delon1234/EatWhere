@@ -38,7 +38,7 @@ function displayRestaurants(){
             }
         }
         var listing = `<div onclick = "gotoRestaurantDetails(this)" style="border-style: solid;
-        border-width: 5px;"item="${i}">
+        border-width: 3px; margin-bottom : 10px" item="${i}">
                             <img src="${frontimg}" style="width:200px;height:200px">
                             <h2>${restaurants[i].Name}</h2>
                         </div>`;
@@ -60,6 +60,30 @@ function displayRestaurantDetails(){
     request.onload = function() {
         var openinghoursData = JSON.parse(request.responseText);
         console.log(openinghoursData);
+        var infoWindow = new google.maps.InfoWindow();
+        var marker, i;
+        var markers = [];
+        var storeLocation = { lat: restaurants[item].Latitude, lng: restaurants[item].Longtitude };
+        var map = new google.maps.Map(document.getElementById("my-map"), {
+            zoom: 14,
+            center: storeLocation,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          });
+        marker = new google.maps.Marker({
+            position: storeLocation,
+            map: map,
+            title: "Find us here",
+            icon: {
+                url: "https://maps.google.com/mapfiles/ms/icons/restaurant.png"
+            }
+        });
+        markers.push(marker);
+        google.maps.event.addListener(marker, "click", (function (marker, i ){
+            return function(){
+                infoWindow.setContent(restaurants[item].Name); 
+                infoWindow.open(map, marker);
+            }
+        })(marker, i));
         document.getElementById("name").innerHTML = restaurants[item].Name;
         document.getElementById("location").innerHTML = restaurants[item].Location;
         document.getElementById("telephone_number").innerHTML = restaurants[item].Telephone_Number;

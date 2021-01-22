@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>restaurant Details</title>
+    <title>Restaurant Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -16,12 +16,13 @@
     <script src="js/account.js"></script>
     <style type="text/css">
         #my-map {
-            width: 500px;
-            height: 400px;
-            margin: 1em auto;
+            width: 300px;
+            height: 300px;
+            margin-right: 100px;
+            float: left;
         }
     </style>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAadz3-cruSx_bosVlRq3p6LtegBbsi3xM&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAadz3-cruSx_bosVlRq3p6LtegBbsi3xM"
     type="text/javascript"></script>
 </head>
 <body onload="getRestaurantsDataForRestaurant()">
@@ -34,35 +35,19 @@
     <h2>Directions & Opening Hours</h2>
     <div id="location"></div>
     <div id="neighbourhood">Neighbourhood: </div>
-    <table id="table">
-        <tr>
-            <th>Day</th>
-            <th>Opening Hours</th>
-        </tr>
-    </table>
-    <div id = "my-map"></div>
-    <script>
-        // Initialize and add the map
-        function initMap() {
-          // The location of Uluru
-          const storeLocation = { lat: -25.344, lng: 131.036 };
-          // The map, centered at Uluru
-          const map = new google.maps.Map(document.getElementById("my-map"), {
-            zoom: 14,
-            center: storeLocation,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          });
-          // The marker, positioned at Uluru
-          const marker = new google.maps.Marker({
-            position: storeLocation,
-            map: map,
-            title: "Find us here"
-          });
-        }
-      </script>
+    <div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px;">
+        <div id = "my-map"></div>
+        <table id="table">
+            <tr>
+                <th>Day</th>
+                <th>Opening Hours</th>
+            </tr>
+        </table>
+    </div>
+    
     <!-- Button/hyperlink to see reviews-->
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal" onclick="getAllReviews()">
+    <button id = "reviewbutton "type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal" onclick="getAllReviews()">
         Reviews
     </button>
     
