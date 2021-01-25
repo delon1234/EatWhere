@@ -18,10 +18,13 @@ class UserAccountDB
                 userAccount.getLastName(), userAccount.getGender(), userAccount.getMobileNumber(), userAccount.getAddress(), userAccount.getProfilePicture(), userAccount.getFacebookAccountID()];
             db.query(sql, values, function(error, result){
                 if (error){
-                    throw error;
+                    //throw error;
+                    if (error.code === "ER_DUP_ENTRY") {
+                        respond.json({result: "Invalid. User Already Exists"});
+                    }
                 }
                 else{
-                    respond.json(result);
+                    respond.json({result: "Valid"});
                 }
             });
         });

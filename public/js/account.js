@@ -1,17 +1,13 @@
 var user = new Object();
 
 function createAccount(){
-    
-    // request.onload(function(){
-    //     //maybe auto login? //or change page to tell user to confirm account
-    //     //need to send email to user account to verify
-    // });
     var createuser = new Object();
     createuser.user_name = document.getElementById("username").value;
     createuser.password = document.getElementById("password").value;
     createuser.email = document.getElementById("email").value;
     createuser.firstname = document.getElementById("first name").value;
     createuser.lastname = document.getElementById("last name").value;
+    createuser.gender = "";
     if (document.getElementById("male").checked){
         createuser.gender = document.getElementById("male").value;
     }
@@ -20,6 +16,19 @@ function createAccount(){
     }
     createuser.mobile_number = document.getElementById("mobile_number").value;
     createuser.address = document.getElementById("address").value;
+    console.log(createuser)
+    var string = "";
+    for (var key in createuser){
+        if (createuser[key] == ""){
+            string += key + " ";
+        }
+    }
+    if (string != ""){
+        alert(string + "is missing. Please input the required fields.");
+        return false;
+    }
+    //check password requirements
+    //check if confirm password == password
     createuser.profile_picture = null;
     // createuser.profile_picture = document.getElementById("profile picture").value;
     createuser.facebook_account_id = null; //later implement facebook login
@@ -29,6 +38,18 @@ function createAccount(){
     //called when user press create account
     var request = new XMLHttpRequest();
     request.open("POST", "/register", true);
+    request.onload = function(){
+        //maybe auto login? //or change page to tell user to confirm account
+        //need to send email to user account to verify
+        result = JSON.parse(request.responseText);
+        if (result.result == "Valid"){
+            window.alert("User is successfully registered.");
+            //prob change the top nav when user is logged in.
+        }
+        else if (result.result == "Invalid. User Already Exists"){
+            window.alert("User Already Exists in the database. Please choose another username.");
+        }
+    };
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(createuser));
 }
