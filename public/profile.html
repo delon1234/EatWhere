@@ -8,10 +8,66 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="js/account.js"></script>
+    <style>
+        #editprofile{
+            float:right;
+        }
+        table{
+            margin-bottom: 10px;
+        }
+        tr td:first-child {
+            width: 150px;
+        }
+        tr td:nth-child(1) {
+            padding-right: 20px;
+        }​
+        body{
+            padding-top: 6%;
+        }
+        
+    </style>
     <link rel="shortcut icon" type="image/jpg" href="favicon.png"/>
     <title>Account Profile</title>
 </head>
-<body>
-    
+<body onload="setProfile()">
+    <div class="container">
+        <button class = "btn btn-outline-dark" href = "editprofile.html" id = "editprofile">Edit Account Details</button>
+        <h1 id="username"></h1>
+        <div id="reviews_posted"></div>
+        <br>
+        <h2>User Profile</h2>
+        <table>
+            <tr>
+                <td>First Name</td>
+                <td id = "first name"></td>
+            </tr>
+            <tr>
+                <td>Last Name</td>
+                <td id = "last name"></td>
+            </tr>
+            <tr>
+                <td>Gender</td>
+                <td id = "gender"></td>
+            </tr>
+        </table>
+        <h2>Contact Details</h2>
+        <table>
+            <tr>
+                <td>Address</td>
+                <td id = "address"></td>
+            </tr>
+            <tr>
+                <td>Email Address</td>
+                <td id = "email"></td>
+            </tr>
+            <tr>
+                <td>Mobile Number</td>
+                <td id = "mobile_number"></td>
+            </tr>
+        </table>
+        <br>
+        <button class="btn btn-danger" onclick="deleteacc()">Delete Account</button>
+        <button class="btn btn-outline-danger" onclick="deactivateacc()">Deactivate Account</button>
+    </div>
 </body>
 </html>

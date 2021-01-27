@@ -67,7 +67,7 @@ function updateReview(){
 }
 function postReview() {
     var review = new Object();
-    var userid = localStorage.getItem("user_id");
+    var userid = sessionStorage.getItem("user_id");
     console.log(userid);
     review.userid = userid;
     review.rating = document.getElementById("postReviewRating").value; // Value from HTML input text

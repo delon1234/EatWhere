@@ -14,27 +14,32 @@
     <script src="js/restaurants.js"></script>
     <script src="js/reviews.js"></script>
     <script src="js/account.js"></script>
+    <script src="js/checktoken.js"></script>
     <link rel="shortcut icon" type="image/jpg" href="favicon.png"/>
 </head>
 <body>
     <div w3-include-html = "top-navigation.html"></div>
     <div class="container">
-        <h1>EatWhere</h1>
-        <h2>Discover the best restaurants nearby</h2>
-        <div class="row searchbar">
+        <h1 class="display-1">EatWhere</h1>
+        <h2 class="display-4">Discover the best restaurants nearby</h2>
+        <div class="row searchbar no-gutters">
                 <div class="col-md-4">
-                    <input class="search-neighbourhood" type="text" placeholder="Singapore">
+                    <div class="input-group rounded">
+                        <input class="search-neighbourhood" type="text" placeholder="Singapore">
+                    </div>
                 </div>
                 <div class="col-md-8">
-                    <input class="search-txt" type="text" placeholder="Search for a restaurant or a cuisine">
-                    <a class="search-btn" href="search.html">
-                        <i class="fas fa-search"></i>
-                    </a>
+                    <div class="input-group rounded">
+                        <input class="search-txt" type="text" placeholder="Search for a restaurant or a cuisine">
+                        <span class="input-group-text border-0" id="search-button">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </div>
                 </div>
         </div>
-        <h3>or</h3>
-        <button class="btn btn-dark">
-            <a href="restaurantlistings.html">See all restaurants here</a>
+        <h3 style="margin: 40px;">or</h3>
+        <button class="btn btn-outline-dark">
+            <a class = "linkbutton" href="restaurantlistings.html">See all restaurants here</a>
         </button>
     </div>
     <!-- <footer>

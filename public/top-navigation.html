@@ -1,10 +1,14 @@
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light" style="display:flex; justify-content: space-between">
   <div class="container-fluid">
-      <a class="navbar-brand" href="#">EatWhere</a>
-        <form class="form-inline" id="search">
-            <input class="form-control mr-sm-2 mx-auto" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0 mx-auto" type="submit">Search</button>
-        </form>
+      <a class="navbar-brand" href="index.html">EatWhere</a>
+      <form class="form-inline row" style="width: 80%; justify-content: center;">
+        <input class="form-control mr-sm-2 search-input" type="search" placeholder="Singapore">
+        <input class="form-control mr-sm-2 search-input" type="search" placeholder="Search for a restaurant or a cuisine" style="width: 300px;">
+        <button class="btn btn-search my-2 my-sm-0 " type="submit">
+           <i class="fas fa-search"></i>
+        </button>
+      </form>
+        
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -14,7 +18,13 @@
             <a class="nav-link" id = "login" data-toggle="modal" href="#loginModal">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id = "sign up" href="register.html">Sign Up</a>
+            <a class="nav-link" id = "signup" href="register.html">Sign Up</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" id = "logout" onclick = "logout();" style="display: none;">Log Out</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" id= "accountdetails" href="profile.html" style="display: none;">Account Details</a>
           </li>
         </ul>
       </div>
@@ -36,7 +46,7 @@
           <input class = "logininput" name="username"id="username" placeholder="Username">
           <input class = "logininput" name="password"id="password" placeholder="Password">
           <a class="align" href="">Forget Password?</a>
-          <button type="button"onclick="login()" style="position: absolute; right: 100px">Login</button>
+          <button type="button" class = "btn btn-outline-dark" onclick="login()" style="position: absolute; right: 100px">Login</button>
           <div class="line"><span>or</span></div>
           <!-- Facebook login button-->
           <a href="register.html">No account? Click here to sign up!</a>

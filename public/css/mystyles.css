@@ -4,14 +4,19 @@ body {
 }
 .searchbar {
     position: relative;
-    
+    margin-top: 80px;
 }
-.search-btn {
-    position: absolute;
-    right: 20px;
+#search-button {
+    background-color: transparent;
 }
 .search-txt, .search-neighbourhood{
-    width: 80%;
+    line-height: 2rem;
+}
+.search-txt {
+    width: 90%;
+}
+.search-neighbourhood{
+    width: 100%;
 }
 .allrestaurants{
     border: 10px;
@@ -23,7 +28,7 @@ body {
     text-align: center; 
     border-bottom: 1px solid #000; 
     line-height: 0.1em;
-    margin: 10px 0 20px; 
+    margin: 40px 0 20px; 
  } 
  
 .line span { 
@@ -41,4 +46,11 @@ body {
 .align {
     position: relative;
     right: 90px;
+}
+.linkbutton, .linkbutton:hover, .linkbutton:focus, .linkbutton:active {
+    color: inherit;
+    text-decoration: none;
+}
+.search-bar-nav {
+    width: 75%;
 }
