@@ -21,7 +21,7 @@
         }
     </style>
 </head>
-<body onload= "getRestaurantsData()">
+<body>
     <div w3-include-html = "top-navigation.html"></div>
     <div class="container" id="restaurantscontainer">
         
@@ -31,5 +31,13 @@
 <script>
         //to bring in other HTML on the fly into this page
         w3.includeHTML();
+        document.body.onload = function(){
+            // get neighbourhood cuisines and categories to populate filters
+            fetchNeighbourhoodsCuisinesCategories();
+            //get restaurantsdata
+            getRestaurantsData();
+            //show top-nav search bar for restaurant listings page.
+            document.getElementById("nav-searchbar").style.display = "flex";
+        }
 </script>
 </html>

@@ -22,17 +22,20 @@
             margin-right: 100px;
             float: left;
         }
+        tr td:first-child{
+            padding-right: 20px; /*add spacing between days and opening hours*/
+        }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAadz3-cruSx_bosVlRq3p6LtegBbsi3xM"
     type="text/javascript"></script>
 </head>
-<body onload="getRestaurantsDataForRestaurant()">
+<body onload="getRestaurantsDataForRestaurant()"><!--get avg and no of reviews-->
     <h1 id="name"></h1>
     <div id="tags">Tags: Cuisine(<span id="cuisine"></span>) Category(<span id="category"></span>)</div>
     <h3>Review Score:</h3>
     <!-- Tags-->
-    <div id="telephone_number"></div>
-    <div id="website"></div>
+    <div id="telephone_number">Telephone Number: </div>
+    <a id="website">Website: </a>
     <h2>Directions & Opening Hours</h2>
     <div id="location"></div>
     <div id="neighbourhood">Neighbourhood: </div>
@@ -71,6 +74,7 @@
         </div>
         </div>
     </div>
+    <!-- Include post and edit review modal-->
     <div w3-include-html = "post-review-modal.html"></div>
     <div w3-include-html = "edit-review-modal.html"></div>
 </body>

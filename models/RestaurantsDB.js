@@ -15,6 +15,7 @@ class RestaurantsDB
             }
         });
     }
+    //get all restaurant data and also avg and no of reviews for all restaurants
     getAllRestaurants(request, respond){
         var sql = "SELECT Restaurants.Restaurant_ID, Restaurants.Name, Restaurants.Location, Restaurants.Latitude, Restaurants.Longtitude, Restaurants.Telephone_Number, Restaurants.Website, Neighbourhoods.Neighbourhood, GROUP_CONCAT(DISTINCT Images.Image_Link) ImagesCollection, GROUP_CONCAT(DISTINCT Cuisines.cuisine) Cuisine_Group, GROUP_CONCAT(DISTINCT categories.Category) Category_Group, GROUP_CONCAT(DISTINCT OpeningHours.Start_At) AS StartingHours, GROUP_CONCAT(DISTINCT OpeningHours.End_At) EndingHours FROM Restaurants LEFT JOIN Images ON Restaurants.Restaurant_ID = Images.Restaurant_ID LEFT JOIN RestaurantsCuisines ON Restaurants.Restaurant_ID = RestaurantsCuisines.Restaurant_ID LEFT JOIN Cuisines ON restaurantscuisines.Cuisine_ID = cuisines.cuisine_ID LEFT JOIN RestaurantsCategories ON restaurants.Restaurant_ID = restaurantscategories.Restaurant_ID LEFT JOIN Categories ON restaurantscategories.Category_ID = Categories.Category_ID LEFT JOIN OpeningHours ON OpeningHours.Restaurant_ID = restaurants.Restaurant_ID LEFT JOIN Neighbourhoods ON restaurants.Neighbourhood_ID = Neighbourhoods.Neighbourhood_ID WHERE OpeningHours.day = DAYNAME(curdate()) GROUP BY restaurants.restaurant_id;";
         sql += "SELECT Restaurants.Restaurant_ID, AVG(Rating) AS AverageRating, COUNT(Rating) AS Review_No FROM Restaurants LEFT JOIN reviews ON Restaurants.Restaurant_ID = Reviews.Restaurant_ID GROUP BY Restaurant_ID";
@@ -27,6 +28,7 @@ class RestaurantsDB
             }
         });
     }
+    //get restaurants based on search/filters
     searchOrFilterRestaurants(request, respond){
         var sql = "SELECT Restaurants.Restaurant_ID, Restaurants.Name, Restaurants.Location, Restaurants.Telephone_Number, Restaurants.Website, Neighbourhoods.Neighbourhood, GROUP_CONCAT(DISTINCT Images.Image_Link) ImagesCollection, GROUP_CONCAT(DISTINCT Cuisines.cuisine) Cuisine_Group, GROUP_CONCAT(DISTINCT categories.Category) Category_Group, GROUP_CONCAT(DISTINCT OpeningHours.Start_At) AS StartingHours, GROUP_CONCAT(DISTINCT OpeningHours.End_At) EndingHours FROM Restaurants LEFT JOIN Images ON Restaurants.Restaurant_ID = Images.Restaurant_ID  LEFT JOIN RestaurantsCuisines ON Restaurants.Restaurant_ID = RestaurantsCuisines.Restaurant_ID LEFT JOIN Cuisines ON restaurantscuisines.Cuisine_ID = cuisines.cuisine_ID LEFT JOIN RestaurantsCategories ON restaurants.Restaurant_ID = restaurantscategories.Restaurant_ID LEFT JOIN Categories ON restaurantscategories.Category_ID = Categories.Category_ID LEFT JOIN OpeningHours ON OpeningHours.Restaurant_ID = restaurants.Restaurant_ID LEFT JOIN Neighbourhoods ON restaurants.Neighbourhood_ID = Neighbourhoods.Neighbourhood_ID WHERE OpeningHours.day = DAYNAME(curdate())";
         var open = " AND CURRENT_TIME() >= OpeningHours.Start_At AND CURRENT_TIME() <= OpeningHours.End_At";
@@ -83,6 +85,7 @@ class RestaurantsDB
             }
         });
     }
+    //get openinghours for all restaurants
     getOpeningHoursForRestaurant(request, respond){
         var sql = "SELECT openinghours.Restaurant_ID, Day, Start_At, End_At from openinghours INNER JOIN Restaurants ON OpeningHours.Restaurant_ID = restaurants.Restaurant_ID WHERE openinghours.Restaurant_ID = ?";
         db.query(sql, request.params.restaurant_id, function (error, result) {
