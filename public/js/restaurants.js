@@ -1,3 +1,4 @@
+//const e = require("express");
 
 function fetchNeighbourhoodsCuisinesCategories(){
     var request = new XMLHttpRequest();
@@ -27,21 +28,33 @@ function getRestaurantsData(){ //get all restaurant data for restaurant listings
 }
 function displayRestaurants(){ // populate restaurant listings
     totalRestaurants = restaurants.length;
+    totalReviews = reviewsData.length;
     for (var i = 0; i < totalRestaurants; i++){
         var frontimg = "";
+        var avgreview;
+        var noofreview;
         restaurants[i].ImagesCollection = restaurants[i].ImagesCollection.split(",");
         imglength = restaurants[i].ImagesCollection.length;
-        //loop and gets frontimg from imagecollection
+        //loops and gets frontimg from imagecollection
         for (var index = 0; index < imglength; index++){
             if (restaurants[i].ImagesCollection[index].includes("front")){
                 frontimg = restaurants[i].ImagesCollection[index];
                 break;
             }
         }
+        for (var loopcount = 0; loopcount < totalReviews; loopcount++){
+            if (reviewsData[loopcount].Restaurant_ID == restaurants[i].Restaurant_ID){
+                avgreview = reviewsData[loopcount].AverageRating;
+                noofreview = reviewsData[loopcount].Review_No;
+            }
+        }
+        var stars = setStars(avgreview);
         var listing = `<div onclick = "gotoRestaurantDetails(this)" style="border-style: solid;
         border-width: 3px; margin-bottom : 10px" item="${i}">
-                            <img src="${frontimg}" style="width:200px;height:200px">
-                            <h2>${restaurants[i].Name}</h2>
+                            <img src="${frontimg}" style="width:200px;height:200px;display: inline-block;">
+                            <span>${restaurants[i].Name}</span>
+                            <span>${stars}</span>
+                            <span>${noofreview} Reviews</span>
                         </div>`;
         document.getElementById("restaurantscontainer").insertAdjacentHTML("beforeend", listing);
     }
@@ -52,6 +65,30 @@ function gotoRestaurantDetails(element){
     var item = element.getAttribute("item"); //knows which restaurant is clicked
     localStorage["item"] = item;
     window.location.href = "restaurant.html" //change to restaurant details page.
+}
+function setStars(avgreview){
+    //This function adds HTML code for star images (full, half and empty) into a string to be outputted/returned.
+    //it takes in average review which could be a float like 3.5 and adds the appropriate star images to match
+    //the average review.
+    var star = "";
+    var counter = 5; // each restaurant must have 5 stars in total
+    for (var j = avgreview; j > 0; j--){
+        if (j >= 1) //full star for every 1 point of review
+        {
+            star += `<i class="fas fa-star"></i>`;
+            counter--;
+        }
+        else if (j >= 0.5){ //half star for every 0.5 point of review
+            //this wont trigger if j is >=1 as this condition is else if
+            //hence half star is only added when avg review has a decimal of 0.5 to <1
+            star += `<i class="fas fa-star-half-alt"></i>`;
+            counter--;
+        }
+    }
+    for (var z = 0; z < counter; z++){
+        star += `<i class="far fa-star"></i>`; //add empty stars for total stars to reach 5.
+    }
+    return star; //returns a string of html code to set star images
 }
 function displayRestaurantDetails(){
     item = localStorage["item"];
@@ -89,7 +126,19 @@ function displayRestaurantDetails(){
                 infoWindow.open(map, marker);
             }
         })(marker, i)); // add listener for onclick of the restaurant icon to open infowindow
+        // loops reviewsdata where all restaurants reviews data are and finds 
+        // the average and number of reviews for the right restaurant based on matching ids.
+        for (var loopcount = 0; loopcount < reviewsData.length; loopcount++){
+            if (reviewsData[loopcount].Restaurant_ID == restaurant_id){
+                avgreview = reviewsData[loopcount].AverageRating;
+                noofreview = reviewsData[loopcount].Review_No;
+            }
+        }
+        var star = setStars(avgreview); //gets a string of HTML code for star images for average review rating.
         //populate restaurant details
+        document.getElementById("review_stars").innerHTML = star;
+        document.getElementById("review_score").innerHTML += avgreview + "/5";
+        document.getElementById("review_no").innerHTML = noofreview + " reviews";
         document.getElementById("name").innerHTML = restaurants[item].Name;
         document.getElementById("location").innerHTML = restaurants[item].Location;
         document.getElementById("telephone_number").innerHTML += restaurants[item].Telephone_Number;
@@ -98,8 +147,8 @@ function displayRestaurantDetails(){
         document.getElementById("neighbourhood").innerHTML += restaurants[item].Neighbourhood;
         document.getElementById("cuisine").innerHTML = restaurants[item].Cuisine_Group;
         document.getElementById("category").innerHTML = restaurants[item].Category_Group;
-        // Populate table with opening hours for every day
         var table = document.getElementById("table");
+        // Populate table with opening hours for every day
         for (var i = 0; i < openinghoursData.length; i++){
             var tablecell = `<tr>
                             <td>${openinghoursData[i].Day}</td>

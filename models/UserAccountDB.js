@@ -4,7 +4,7 @@ const UserAccount = require("../models/UserAccount");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 var jwt = require("jsonwebtoken");
-var secret = "secretkey"
+var secret = "secretkey" //key to encrypt for jwt token
 class UserAccountDB 
 {
 
@@ -19,12 +19,17 @@ class UserAccountDB
             db.query(sql, values, function(error, result){
                 if (error){
                     //throw error;
+                    // if there exists a user with the same username as inputted
+                    //every user must have a unique username
                     if (error.code === "ER_DUP_ENTRY") {
                         respond.json({result: "Invalid. User Already Exists"});
+                        // responds to client that there is already a user with the same username and that
+                        // the registration is invalid.
                     }
                 }
                 else{
                     respond.json({result: "Valid"});
+                    //responds to client that registration is successful
                 }
             });
         });
@@ -39,22 +44,28 @@ class UserAccountDB
                 throw error;
             }
             else{
-                
-                // Compares plaintext password in json with password_hash stored in database
-                var userid = result[0].User_ID;
-                bcrypt.compare(password, result[0].password, function(err, result) {
-                    if (result == true){ // if passwords matches/login successful
-                        console.log("Success");
-                        var token = jwt.sign(user_name, secret);
-                        respond.json({result: token, userid: userid});
-                        
-                    }
-                    else{
-                        console.log("Invalid"); //login unsucessful as passwords do not match
-                        respond.json({result: "Invalid"})
-                    }
-                });
-                //respond.json(result);
+                if (result === undefined || result.length == 0)
+                {
+                    //if database does not return username and password and instead an empty array
+                    respond.json({result: "Invalid"});
+                }
+                else
+                {
+                    //if there exists a user with the username inputted
+                    var userid = result[0].User_ID;
+                    // Compares plaintext password in json with password_hash stored in database
+                    bcrypt.compare(password, result[0].password, function(err, result) {
+                        if (result == true){ // if passwords matches/login successful
+                            console.log("Success");
+                            var token = jwt.sign(user_name, secret);//create a jwt token to verify user's identity
+                            respond.json({result: token, userid: userid});//give user a token and userid
+                        }
+                        else{
+                            respond.json({result: "Invalid"}) // let browser know invalid password.
+                            // input password does not match with password in database
+                        }
+                    });
+                }
             }
         });
     }
@@ -75,24 +86,27 @@ class UserAccountDB
     {
         var token = request.body.token;
         try {
-            var decoded = jwt.verify(token, secret);
+            var decoded = jwt.verify(token, secret);//protect endpoint with token
+            //so that malicious people cannot edit account details
+            //verify if the user is legit
             bcrypt.hash(request.body.password, saltRounds, function(err, hash){
                 var userObject = new UserAccount(request.params.id, request.body.user_name, hash, request.body.email, request.body.firstname, request.body.lastname, 
                     request.body.gender, request.body.mobile_number, request.body.address, 
                     null, request.body.profile_picture, 1, null, null);
-                var sql = "UPDATE EatWhere.User_Accounts SET User_Name = ?, Password_Hash = ? , FirstName= ?, LastName = ?, Email = ?, Gender = ?, Mobile_Number = ?, Address = ?, Profile_Picture = ? WHERE User_ID = ?";
-                var values = [userObject.getUserName(), userObject.getPassword(), userObject.getFirstName(), userObject.getLastName(), userObject.getEmail(), userObject.getGender(), 
+                var sql = "UPDATE EatWhere.User_Accounts SET Password_Hash = ? , FirstName= ?, LastName = ?, Email = ?, Gender = ?, Mobile_Number = ?, Address = ?, Profile_Picture = ? WHERE User_ID = ?";
+                var values = [userObject.getPassword(), userObject.getFirstName(), userObject.getLastName(), userObject.getEmail(), userObject.getGender(), 
                     userObject.getMobileNumber(), userObject.getAddress(), userObject.getProfilePicture(), userObject.getId()];
                 db.query(sql, values, function(error, result){
                     if (error){
                         throw error;
                     }
                     else{
-                        respond.json(result);
+                        respond.json({result: "Success"});
                     }
                 });
             });
         } catch (err) {
+            //if user is not legit
             respond.json({result: "Invalid token!" });
         }
         

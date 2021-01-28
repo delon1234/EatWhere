@@ -9,6 +9,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="js/account.js"></script>
     <style>
+        body{
+            padding-top: 6%;
+        }
         #editprofile{
             float:right;
         }
@@ -24,45 +27,51 @@
         body{
             padding-top: 6%;
         }
-        
+        #profile_picture-profile {
+            height: 300px;
+            width: 300px;
+            border-radius: 50%;
+        }
     </style>
     <link rel="shortcut icon" type="image/jpg" href="favicon.png"/>
     <title>Account Profile</title>
 </head>
 <body onload="setProfile()">
+    <div w3-include-html = "top-navigation.html"></div>
     <div class="container">
-        <button class = "btn btn-outline-dark" href = "editprofile.html" id = "editprofile">Edit Account Details</button>
-        <h1 id="username"></h1>
-        <div id="reviews_posted"></div>
+        <button class = "btn btn-outline-dark" onclick="location.href = 'editprofile.html' " id = "editprofile">Edit Account Details</button>
+        <img id = "profile_picture-profile">
+        <h1 id="username-profile"></h1>
+        <div id="reviews_posted-profile"></div>
         <br>
         <h2>User Profile</h2>
         <table>
             <tr>
                 <td>First Name</td>
-                <td id = "first name"></td>
+                <td id = "firstname-profile"></td>
             </tr>
             <tr>
                 <td>Last Name</td>
-                <td id = "last name"></td>
+                <td id = "lastname-profile"></td>
             </tr>
             <tr>
                 <td>Gender</td>
-                <td id = "gender"></td>
+                <td id = "gender-profile"></td>
             </tr>
         </table>
         <h2>Contact Details</h2>
         <table>
             <tr>
                 <td>Address</td>
-                <td id = "address"></td>
+                <td id = "address-profile"></td>
             </tr>
             <tr>
                 <td>Email Address</td>
-                <td id = "email"></td>
+                <td id = "email-profile"></td>
             </tr>
             <tr>
                 <td>Mobile Number</td>
-                <td id = "mobile_number"></td>
+                <td id = "mobile_number-profile"></td>
             </tr>
         </table>
         <br>
@@ -70,4 +79,10 @@
         <button class="btn btn-outline-danger" onclick="deactivateacc()">Deactivate Account</button>
     </div>
 </body>
+<script src="js/w3.js"></script>
+<script>
+        //to bring in other HTML on the fly into this page
+        w3.includeHTML();
+</script>
+<script src="js/checktoken.js"></script>
 </html>

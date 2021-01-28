@@ -1,3 +1,5 @@
+//const e = require("express");
+
 var user;
 
 function createAccount(){
@@ -93,8 +95,7 @@ function logout(){
     document.getElementById("signup").style.display = "block";
     document.getElementById("logout").style.display = "none";
     document.getElementById("accountdetails").style.display = "none";
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("user_id");
+    sessionStorage.clear()
 }
 function getprofile(){
     var request = new XMLHttpRequest();
@@ -112,7 +113,12 @@ function getprofile(){
         user.mobile_number = userProfile.Mobile_Number;
         user.address = userProfile.Address;
         user.reviews_posted = userProfile.Reviews_Posted;
-        user.profile_picture = userProfile.Profile_Picture;
+        if (userProfile.Profile_Picture == null){
+            user.profile_picture = "/images/avatar.png";
+        }
+        else{
+            user.profile_picture = userProfile.Profile_Picture;
+        }
         console.log(user);
         sessionStorage.setItem("accountdetails", JSON.stringify(user));
     }
@@ -120,36 +126,73 @@ function getprofile(){
 }
 function setProfile(){ //populate the profile page
     var user = JSON.parse(sessionStorage.getItem("accountdetails"));
+    console.log(user)
+    document.getElementById("profile_picture-profile").setAttribute("src", user.profile_picture);
+    document.getElementById("username-profile").innerHTML = user.user_name;
+    document.getElementById("firstname-profile").innerHTML = user.first_name;
+    document.getElementById("lastname-profile").innerHTML = user.last_name;
+    document.getElementById("gender-profile").innerHTML = user.gender;
+    document.getElementById("address-profile").innerHTML = user.address;
+    document.getElementById("email-profile").innerHTML = user.email;
+    document.getElementById("mobile_number-profile").innerHTML = user.mobile_number;
+    document.getElementById("reviews_posted-profile").innerHTML = "Contributed " + user.reviews_posted + " Reviews";
+}
+function setEditProfile(){
+    //get user account details from sessionStorage
+    var user = JSON.parse(sessionStorage.getItem("accountdetails"));
+    //all account details are autofilled except for password as it is important for the user to rmb their password
+    //set the fields that were previously entered onto the form to make it easy for the user.
     document.getElementById("username").innerHTML = user.user_name;
-    document.getElementById("first name").innerHTML = user.first_name;
-    document.getElementById("last name").innerHTML = user.last_name;
-    document.getElementById("gender").innerHTML = user.gender;
-    document.getElementById("address").innerHTML = user.address;
-    document.getElementById("email").innerHTML = user.email;
-    document.getElementById("mobile_number").innerHTML = user.mobile_number;
-    document.getElementById("reviews_posted").innerHTML = "Contributed " + user.reviews_posted + " Reviews";
+    document.getElementById("email").value = user.email;
+    document.getElementById("first name").value = user.first_name;
+    document.getElementById("last name").value = user.last_name;
+    if (user.gender == "M"){
+        document.getElementById("male").checked = true;
+    }
+    else{
+        document.getElementById("female").checked = true;
+    }
+    document.getElementById("mobile_number").value = user.mobile_number;
+    document.getElementById("address").value = user.address;
 }
 function editProfile(){
+    console.log("Invoked")
     //After user edits profile and press submit(called when submit is pressed)
-    
     var userProfileObject = new Object();
-    //userProfileObject.user_name = document.getElementById("username").value;
-    // may consider not allowing changing of username, since token is created using username
-    //might also need to change sql statement
+    //don't allowing changing of username
     userProfileObject.password = document.getElementById("password").value
     userProfileObject.email = document.getElementById("email").value
     userProfileObject.firstname = document.getElementById("first name").value
     userProfileObject.lastname = document.getElementById("last name").value
-    userProfileObject.gender =  document.getElementById("gender").value
-    userProfileObject.mobile_number = document.getElementById("mobile number").value
+    if (document.getElementById("male").checked){
+        userProfileObject.gender = document.getElementById("male").value;
+    }
+    else if (document.getElementById("female").checked){
+        userProfileObject.gender = document.getElementById("female").value;
+    }
+    userProfileObject.mobile_number = document.getElementById("mobile_number").value
     userProfileObject.address = document.getElementById("address").value
-    userProfileObject.profile_picture = document.getElementById("profile picture").value //may change
-    userProfileObject.token = token;
+    if (document.getElementById("profile_picture").value == "")
+    {
+        userProfileObject.profile_picture = null;
+    }
+    else{
+        userProfileObject.profile_picture = document.getElementById("profile_picture").value //may change
+    }
+    userProfileObject.token = sessionStorage.getItem("token");
+    console.log(userProfileObject);
     var request = new XMLHttpRequest();
-    var url = "/profile/" + user.id;
+    var url = "/profile/" + sessionStorage.getItem("user_id");
     request.open("PUT", url, true);
     request.onload = function(){
-        getprofile();
+        var result = JSON.parse(request.responseText);
+        if (result.result == "Invalid token!"){
+            window.alert("Invalid token.");
+        }
+        else{
+            getprofile();
+            window.location.replace("profile.html");
+        }
     }
     request.setRequestHeader("Content-Type", "application/json");
     request.send(JSON.stringify(userProfileObject));

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register for EatWhere</title>
+    <title>Edit User Account Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -11,19 +11,10 @@
     <script src="js/account.js"></script>
     <link rel="shortcut icon" type="image/jpg" href="favicon.png"/>
 </head>
-<body>
-    <!-- <div class="container">
-
-    </div> -->
+<body onload = "setEditProfile()">
     <div class="container">
-        <h1>Account Details</h1>
-        <!-- Need to fix open login modal here-->
-        <span>Already have an account? Click here to <span><a id="redirectToLogin">login!</a></span></span>
-        <form onsubmit="createAccount(); return false">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="delon1234" maxlength = "40" autofocus required>
-            </div>
+        <h1 id = "username"></h1>
+        <form onsubmit="editProfile(); return false">
             <div class="form-group">
                 <label for="password">Password</label>
                 <small id="passwordHelpBlock" class="form-text text-muted">
@@ -44,11 +35,11 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="first name">First Name</label>
-                    <input type="text" class="form-control" id="first name" placeholder = "Zi Long Delon" maxlength = "64" required>
+                    <input type="text" class="form-control" id="first name" maxlength = "64" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="last name">Last Name</label>
-                    <input type="text" class="form-control" id="last name" placeholder = "Quok" maxlength = "64" required>
+                    <input type="text" class="form-control" id="last name" maxlength = "64" required>
                 </div>
             </div>
             <div class="form-row">
@@ -76,7 +67,7 @@
                 <label for="profile_picture">Upload Profile Picture(Optional)</label>
                 <input type="file" class="form-control-file" id="profile_picture">
             </div>
-            <button class="btn btn-primary">Register Account</button>
+            <button class="btn btn-primary">Submit changes</button>
         </form>
     </div>
 </body>
