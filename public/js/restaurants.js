@@ -82,10 +82,10 @@ function filterRestaurant(){
     request.onload = function(){
         var result = JSON.parse(request.responseText);
         console.log(result);
-        restaurants = restaurantsData[0];
-        console.log(restaurants)
-        reviewsData = restaurantsData[1];
-        displayRestaurants(restaurants, reviewsData);
+        restaurants = result[0];
+        console.log(restaurants);
+        reviewsData = result[1];
+        displayRestaurants();
     };
     request.send(JSON.stringify(searchObject));
 }
@@ -97,11 +97,11 @@ function getRestaurantsData(){ //get all restaurant data for restaurant listings
         restaurants = restaurantsData[0];
         reviewsData = restaurantsData[1];
         console.log(restaurantsData);
-        displayRestaurants(restaurants, reviewsData);
+        displayRestaurants();
     };
     request.send();
 }
-function displayRestaurants(restaurants, reviewsData){ // populate restaurant listings
+function displayRestaurants(){ // populate restaurant listings
     totalRestaurants = restaurants.length;
     totalReviews = reviewsData.length;
     console.log("Display Restaurants")
@@ -110,34 +110,45 @@ function displayRestaurants(restaurants, reviewsData){ // populate restaurant li
         var frontimg = "";
         var avgreview;
         var noofreview;
-        console.log(restaurants[i].ImagesCollection)
-        if (!Array.isArray(restaurants[i].ImagesCollection)) // if not array which means it is string
+        //this is to check for whether imagescollection returned from the api is not an array(string) or an array
+        //for getallRestaurants imagescollection is returned as a string but for searchandfilterRestaurants
+        //imagescollection is returned as an array.
+        if (!Array.isArray(restaurants[i].ImagesCollection))// if not array which means it is string
         {
-            restaurants[i].ImagesCollection = restaurants[i].ImagesCollection.split(","); //split the string into array
+            //as imagescollection is a string of links to the images of the restaurants seperated by commas,
+            //e.g. "/image1.png,/image2.png" hence we split this string by comma into ["/image1.png", "/image2.png"]
+            restaurants[i].ImagesCollection = restaurants[i].ImagesCollection.split(","); 
         }
         imglength = restaurants[i].ImagesCollection.length;
-        //loops and gets frontimg from imagecollection
+        //loops through the array of imagecollection and gets frontimg from imagecollection
+        //front images will be denoted with front in their name
         for (var index = 0; index < imglength; index++){
             if (restaurants[i].ImagesCollection[index].includes("front")){
                 frontimg = restaurants[i].ImagesCollection[index];
                 break;
             }
         }
+        //loops through the array of reviewdata for all restaurants and checks if the corresponding reviewdata matches the 
+        //restaurant based on its id, if it matches, get the average rating and number of reviews
         for (var loopcount = 0; loopcount < totalReviews; loopcount++){
             if (reviewsData[loopcount].Restaurant_ID == restaurants[i].Restaurant_ID){
                 avgreview = reviewsData[loopcount].AverageRating;
                 noofreview = reviewsData[loopcount].Review_No;
             }
         }
+        //set stars based on average review rating of restaurant
         var stars = setStars(avgreview);
+        //inserts each restaurant listing HTML code onto the page
         var listing = `<div onclick = "gotoRestaurantDetails(this)" style="border-style: solid;
-        border-width: 3px; margin-bottom : 10px" item="${i}">
+        border-width: 3px; margin-bottom : 10px" item="${restaurants[i].Restaurant_ID}">
                             <img src="${frontimg}" style="width:200px;height:200px;display: inline-block;">
                             <span>${restaurants[i].Name}</span>
                             <span>${stars}</span>
                             <span>${noofreview} Reviews</span>
                         </div>`;
         document.getElementById("restaurantscontainer").insertAdjacentHTML("beforeend", listing);
+        //this inserts the restaurant listing just before the end of the restaurantscontainer closing tag
+        //ensuring that the order of restaurants is the same as retrieved from the database
     }
 }
 function gotoRestaurantDetails(element){
@@ -172,8 +183,15 @@ function setStars(avgreview){
     return star; //returns a string of html code to set star images
 }
 function displayRestaurantDetails(){
-    item = localStorage["item"];
-    restaurant_id = restaurants[item].Restaurant_ID;
+    item = localStorage["item"]; //gets item from localStorage to know which restaurant has been clicked
+    //as item is the restaurant id, we will loop through the array of all restaurants and find the index of the
+    //restaurant so we can retrieve the details of the restaurant
+    for (var i = 0; i < restaurants.length; i++){
+        if (restaurants[i].Restaurant_ID == item){
+            restaurant_id = restaurants[i].Restaurant_ID;
+            item = i;
+        }
+    }
     var request = new XMLHttpRequest();
     var url = "/restaurants/" + restaurant_id;
     request.open("GET", url, true);
@@ -184,7 +202,8 @@ function displayRestaurantDetails(){
         var marker, i;
         var markers = [];
         var storeLocation = { lat: restaurants[item].Latitude, lng: restaurants[item].Longtitude }; 
-        //storelocation object of latitude and longtitude for map to set location
+        //storelocation object of latitude and longtitude for map and marker to set location on the restaurant.
+        //latitude and longtitude of a restaurant is stored in the database
         //initialise map
         var map = new google.maps.Map(document.getElementById("my-map"), {
             zoom: 14,
@@ -219,9 +238,12 @@ function displayRestaurantDetails(){
         //populate restaurant details
         document.getElementById("review_stars").innerHTML = star;
         if (avgreview != null){
+            //I round the average review rating to 2 decimal places to make it more visually appealing and consistent as
+            //there could be average rating of 3.3333 
             document.getElementById("review_score").innerHTML += avgreview.toFixed(2) + "/5";
         }
         else {
+            //if no review has been made, there will not be review score/rating
             document.getElementById("review_score").innerHTML += "No Reviews Has Been Made";
         }
         document.getElementById("review_no").innerHTML = noofreview + " reviews";
@@ -235,10 +257,12 @@ function displayRestaurantDetails(){
         document.getElementById("category").innerHTML = restaurants[item].Category_Group;
         var table = document.getElementById("table");
         // Populate table with opening hours for every day
+        // Substring from 0 to length - 3 is to get rid of the milliseconds e.g. 11:00:00 changes to 11:00
+        // as milliseconds is redundant
         for (var i = 0; i < openinghoursData.length; i++){
             var tablecell = `<tr>
                             <td>${openinghoursData[i].Day}</td>
-                            <td>${openinghoursData[i].Start_At} - ${openinghoursData[i].End_At}</td>
+                            <td>${openinghoursData[i].Start_At.substring(0, openinghoursData[i].Start_At.length - 3)} - ${openinghoursData[i].End_At.substring(0, openinghoursData[i].End_At.length - 3)}</td>
                             </tr>`
             table.insertAdjacentHTML("beforeend", tablecell);// add tablecell before the ending of the table closing tag
         }
