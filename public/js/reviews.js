@@ -35,18 +35,23 @@ function getAllReviews(){
     request.send();
 }
 function editReviewRequest(element){
-    var item = element.getAttribute("item");
+    // this function sets the review data and username in the modal previously entered by the user like review, rating.
+    var item = element.getAttribute("item");//gets item so we can retrieve the same review selected.
     currentIndex = item;
     document.getElementById("usernameforedit").innerHTML = reviews[item].User_Name;
     document.getElementById("editReview").value = reviews[item].Review;
-    //document.getElementById("editReviewRating").value = reviews[item].rating;
+    // This portion is to reset the stars back to empty so that the stars can match the rating obtained from the db.
+    var stars = document.getElementsByClassName("fa-star edit");
+    for (let star of stars){
+        star.setAttribute("class", "far " + "fa-star edit");
+    }
+    //This is to change the stars to match the rating previously entered by the user
     changeStarColour(reviews[item].rating, ".fa-star.edit", "fa-star edit");
 }
 function deleteReviewRequest(element) {
     var response = confirm("Are you sure you want to delete this comment?");
-
-    if (response == true) {
-        var item = element.getAttribute("item"); //get the current item
+    if (response == true) { //if user wants to delete, send delete request
+        var item = element.getAttribute("item"); //get the current item/review that the user selected to delete
         var delete_review_url = "/restaurants/" + restaurant_id + "/reviews/" + reviews[item].Review_ID;
         var request = new XMLHttpRequest();
         request.open("DELETE", delete_review_url, true);
@@ -69,9 +74,18 @@ function updateReview(){
         reviews[currentIndex].rating = rating;
         request.onload = function() {
             getAllReviews();
+            $('#reviewModal').modal('show');
         };
         console.log(JSON.stringify(reviews[currentIndex]))
         request.send(JSON.stringify(reviews[currentIndex]));
+    }
+}
+function newReview(){
+    rating = 0;
+    document.getElementById("postReview").value = "";
+    var stars = document.getElementsByClassName("fa-star post");
+    for (let star of stars){
+        star.setAttribute("class", "far " + "fa-star post");
     }
 }
 function postReview() {
@@ -80,6 +94,13 @@ function postReview() {
     if (userid == null){
         //checks if user has logged in, if not logged in, cannot post review
         window.alert("You cannot post review without being logged in!");
+        return null;
+    }
+    if (document.getElementById("postReview").value == "" || rating == 0){
+        // checks if user has entered anything in the review and if user has selected a rating
+        // if no rating, exit postReview so no empty and useless review is made and alert user that he 
+        //cannot make a review without contents and without rating.
+        window.alert("You cannot post a review without a rating and contents.");
         return null;
     }
     console.log(userid);
@@ -95,6 +116,7 @@ function postReview() {
     request.setRequestHeader("Content-Type", "application/json");
     request.onload = function() {
         getAllReviews();
+        $('#reviewModal').modal('show');
     };
 // Convert the data in Comment object to JSON format before sending to the server.
     request.send(JSON.stringify(review));
@@ -108,8 +130,10 @@ function rateIt(element) {
     else if (classname.includes("edit")){
         classname = "fa-star edit";
     }
-    // if consists of post, setAttribute "post"
-    
+    // if class of element consists of post, setAttribute with the class "post"
+    // if consist of edit, setAttribute with the class "edit"
+    //post is for post review and edit is for edit review
+    //this allows for correct targetting of stars
     console.log(classname)
     var stars = document.getElementsByClassName(classname);
     //replace 1st instance of space to . to make queryselector work properly

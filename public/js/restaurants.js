@@ -4,15 +4,90 @@ function fetchNeighbourhoodsCuisinesCategories(){
     var request = new XMLHttpRequest();
     request.open("GET", restauranturl, true);
     request.onload = function(){
-        console.log(request.responseText);
         data = JSON.parse(request.responseText);
         //seperate the data into neighbourhoods, cuisines and categories
         neighbourhoods = data[0];
         categories = data[1];
         cuisines = data[2];
+        setNeighbourhoodsCuisinesCategories(neighbourhoods, categories, cuisines);
     };
     
     request.send();
+}
+function setNeighbourhoodsCuisinesCategories(neighbourhoods, categories, cuisines){
+    var lengthNeighbourhoods = neighbourhoods.length;
+    var lengthCategories = categories.length;
+    var lengthCuisines = cuisines.length;
+    for (var i = 0; i < lengthNeighbourhoods; i++){
+        var temp = neighbourhoods[i].Neighbourhood;
+        var cell = `<div class="form-check">
+                        <input class="form-check-input" type="radio" value="${temp}" id="${temp}" name = "neighbourhood" >
+                        <label class="form-check-label" for="${temp}">${temp}</label>
+                    </div>`
+        document.getElementById("neighbourhoods").insertAdjacentHTML('beforeend', cell);
+    }
+    for (var i = 0; i < lengthCuisines; i++){
+        var temp = cuisines[i].Cuisine;
+        var cell = `<div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="${temp}" id="${temp}">
+                        <label class="form-check-label" for="${temp}">${temp}</label>
+                    </div>`
+        document.getElementById("cuisines").insertAdjacentHTML('beforeend', cell);
+    }
+    for (var i = 0; i < lengthCategories; i++){
+        var temp = categories[i].Category;
+        var cell = `<div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="${temp}" id="${temp}">
+                        <label class="form-check-label" for="${temp}">${temp}</label>
+                    </div>`
+        document.getElementById("categories").insertAdjacentHTML('beforeend', cell);
+    }
+    
+}
+function filterRestaurant(){
+    var categoriesarray = [];
+    var cuisinesarray = [];
+    var neighbourhood = "";
+    var neighbourhoodsData = document.querySelectorAll("#neighbourhoods input");
+    for (var i = 0; i < neighbourhoodsData.length; i++){
+        if (neighbourhoodsData[i].checked){
+            neighbourhood = neighbourhoodsData[i].value;
+            break; //can only search for restaurant by 1 neighbourhood
+        }
+    }
+    var cuisinesData = document.querySelectorAll("#cuisines input");
+    for (var i = 0; i < cuisinesData.length; i++){
+        if (cuisinesData[i].checked){
+            cuisinesarray.push(cuisinesData[i].value);
+        }
+    }
+    var categoriesData = document.querySelectorAll("#categories input");
+    for (var i = 0; i < categoriesData.length; i++){
+        if (categoriesData[i].checked){
+            categoriesarray.push(categoriesData[i].value);
+        }
+    }
+    if (document.getElementById("opennow").checked){
+        categoriesarray.push("Open Now");
+    }
+    var searchObject = new Object();
+    searchObject.restaurant_name = document.getElementById("nav-searchtext").value;
+    searchObject.categories = categoriesarray;
+    searchObject.cuisines = cuisinesarray;
+    searchObject.neighbourhood = neighbourhood;
+    console.log(searchObject);
+    var request = new XMLHttpRequest();
+    request.open("POST", "/restaurants", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.onload = function(){
+        var result = JSON.parse(request.responseText);
+        console.log(result);
+        restaurants = restaurantsData[0];
+        console.log(restaurants)
+        reviewsData = restaurantsData[1];
+        displayRestaurants(restaurants, reviewsData);
+    };
+    request.send(JSON.stringify(searchObject));
 }
 function getRestaurantsData(){ //get all restaurant data for restaurant listings page
     var request = new XMLHttpRequest();
@@ -21,19 +96,25 @@ function getRestaurantsData(){ //get all restaurant data for restaurant listings
         restaurantsData = JSON.parse(request.responseText);
         restaurants = restaurantsData[0];
         reviewsData = restaurantsData[1];
-        console.log(reviewsData);
-        displayRestaurants();
+        console.log(restaurantsData);
+        displayRestaurants(restaurants, reviewsData);
     };
     request.send();
 }
-function displayRestaurants(){ // populate restaurant listings
+function displayRestaurants(restaurants, reviewsData){ // populate restaurant listings
     totalRestaurants = restaurants.length;
     totalReviews = reviewsData.length;
+    console.log("Display Restaurants")
+    document.getElementById("restaurantscontainer").innerHTML = "";
     for (var i = 0; i < totalRestaurants; i++){
         var frontimg = "";
         var avgreview;
         var noofreview;
-        restaurants[i].ImagesCollection = restaurants[i].ImagesCollection.split(",");
+        console.log(restaurants[i].ImagesCollection)
+        if (!Array.isArray(restaurants[i].ImagesCollection)) // if not array which means it is string
+        {
+            restaurants[i].ImagesCollection = restaurants[i].ImagesCollection.split(","); //split the string into array
+        }
         imglength = restaurants[i].ImagesCollection.length;
         //loops and gets frontimg from imagecollection
         for (var index = 0; index < imglength; index++){
@@ -137,13 +218,18 @@ function displayRestaurantDetails(){
         var star = setStars(avgreview); //gets a string of HTML code for star images for average review rating.
         //populate restaurant details
         document.getElementById("review_stars").innerHTML = star;
-        document.getElementById("review_score").innerHTML += avgreview + "/5";
+        if (avgreview != null){
+            document.getElementById("review_score").innerHTML += avgreview.toFixed(2) + "/5";
+        }
+        else {
+            document.getElementById("review_score").innerHTML += "No Reviews Has Been Made";
+        }
         document.getElementById("review_no").innerHTML = noofreview + " reviews";
         document.getElementById("name").innerHTML = restaurants[item].Name;
         document.getElementById("location").innerHTML = restaurants[item].Location;
         document.getElementById("telephone_number").innerHTML += restaurants[item].Telephone_Number;
         document.getElementById("website").innerHTML += restaurants[item].Website;
-        document.getElementById("website").href = "http://" + restaurants[item].Website;
+        document.getElementById("website").href = restaurants[item].Website;
         document.getElementById("neighbourhood").innerHTML += restaurants[item].Neighbourhood;
         document.getElementById("cuisine").innerHTML = restaurants[item].Cuisine_Group;
         document.getElementById("category").innerHTML = restaurants[item].Category_Group;

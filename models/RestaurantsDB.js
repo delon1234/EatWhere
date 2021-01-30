@@ -34,38 +34,42 @@ class RestaurantsDB
         var open = " AND CURRENT_TIME() >= OpeningHours.Start_At AND CURRENT_TIME() <= OpeningHours.End_At";
         var grp = " GROUP BY restaurants.restaurant_id";
         var having = false;
-        if (request.body.restaurant_name != null) {
+        if (request.body.restaurant_name != "") {
             var restaurantnamefilter = " AND Restaurants.name LIKE \"%";
             restaurantnamefilter += request.body.restaurant_name + "%\"";
             sql += restaurantnamefilter;
         }
-        for (let i = 0; i < request.body.categories.length; i++)
-        {
-            if (request.body.categories[i] == "Open Now") {
-                sql += open;
+        if (request.body.categories.length != 0){
+            for (let i = 0; i < request.body.categories.length; i++)
+            {
+                if (request.body.categories[i] == "Open Now") {
+                    sql += open;
+                }
+                else{
+                    if (!having) 
+                    {
+                        grp += " HAVING Category_Group LIKE \"%" + request.body.categories[i] + "%\"";
+                        having = true;
+                    }
+                    else
+                    {
+                        grp += " AND " + "Category_Group LIKE \"%" + request.body.categories[i] + "%\"";
+                    }
+                }
             }
-            else{
-                if (!having) 
-                {
-                    grp += " HAVING Category_Group LIKE \"%" + request.body.categories[i] + "%\"";
+        }
+        if (request.body.cuisines.length != 0){
+            for (let i = 0; i < request.body.cuisines.length; i++){
+                if (!having) {
+                    grp += " HAVING Cuisine_Group LIKE \"%" + request.body.cuisines[i] + "%\"";
                     having = true;
                 }
-                else
-                {
-                    grp += " AND " + "Category_Group LIKE \"%" + request.body.categories[i] + "%\"";
+                else{
+                    grp += " AND " + "Cuisine_Group LIKE \"%" + request.body.cuisines[i] + "%\"";
                 }
             }
         }
-        for (let i = 0; i < request.body.cuisines.length; i++){
-            if (!having) {
-                grp += " HAVING Cuisine_Group LIKE \"%" + request.body.cuisines[i] + "%\"";
-                having = true;
-            }
-            else{
-                grp += " AND " + "Cuisine_Group LIKE \"%" + request.body.cuisines[i] + "%\"";
-            }
-        }
-        if (request.body.neighbourhood != null){
+        if (request.body.neighbourhood != ""){
             if (!having) {
                 grp += " HAVING Neighbourhood LIKE \"%" + request.body.neighbourhood + "%\"";
                 having = true;
@@ -75,6 +79,7 @@ class RestaurantsDB
             }
         }
         sql += grp;
+        console.log(sql)
         sql += "; SELECT Restaurants.Restaurant_ID, AVG(Rating) AS AverageRating, COUNT(Rating) AS Review_No FROM Restaurants LEFT JOIN reviews ON Restaurants.Restaurant_ID = Reviews.Restaurant_ID GROUP BY Restaurant_ID";
         db.query(sql, function (error, result) {
             if (error) {
