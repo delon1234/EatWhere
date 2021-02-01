@@ -21,7 +21,7 @@ function setNeighbourhoodsCuisinesCategories(neighbourhoods, categories, cuisine
     for (var i = 0; i < lengthNeighbourhoods; i++){
         var temp = neighbourhoods[i].Neighbourhood;
         var cell = `<div class="form-check">
-                        <input class="form-check-input" type="radio" value="${temp}" id="${temp}" name = "neighbourhood" >
+                        <input class="form-check-input" type="checkbox" value="${temp}" id="${temp}" name = "neighbourhood" onclick="onlyOneNeighbourhood(this)" >
                         <label class="form-check-label" for="${temp}">${temp}</label>
                     </div>`
         document.getElementById("neighbourhoods").insertAdjacentHTML('beforeend', cell);
@@ -43,6 +43,13 @@ function setNeighbourhoodsCuisinesCategories(neighbourhoods, categories, cuisine
         document.getElementById("categories").insertAdjacentHTML('beforeend', cell);
     }
     
+}
+function onlyOneNeighbourhood(checkbox){
+    var checkboxes = document.getElementsByName('neighbourhood')
+    checkboxes.forEach((item) => { //loops through all neighbourhood checkboxes and check if they are checked
+        if (item !== checkbox) item.checked = false
+    }) // uncheck all checkboxes that isnt the checkbox clicked by the user hence ensuring only one checkbox/neighbourhood
+    //is checked/selected
 }
 function filterRestaurant(){
     var categoriesarray = [];

@@ -13,8 +13,14 @@ function getAllReviews(){
         for (var i = 0; i < reviews.length; i++){
             var d = new Date(reviews[i].Date_Posted);
             var star = "";
+            var counter = 5;
+            //this for loop sets full stars to match the rating
             for (var j = 0; j < reviews[i].rating; j++) {
                 star += `<i class="fas fa-star"></i>`;
+            }
+            //fill empty stars such that total stars = 5
+            for (var z = 0; z < counter - reviews[i].rating; z++){
+                star += `<i class="far fa-star"></i>`;
             }
             var cell = `<div class="container" style="margin-top:50px">
                             <div id = "name${i}">User ID:${reviews[i].User_Name}</div>
@@ -139,7 +145,7 @@ function rateIt(element) {
     //replace 1st instance of space to . to make queryselector work properly
     var classTarget = "." + classname.replace(" ", ".");
     //This is another way of writing 'for' loop, which initialises the 
-    //star images to empty.
+    //star images to empty. This allows user to reset the stars and change their rating after changing it previously
     for (let star of stars){
         star.setAttribute("class", "far " + classname);
     }
