@@ -1,3 +1,5 @@
+//const bodyParser = require("body-parser");
+
 var rating = 0;
 function getAllReviews(){
     var request = new XMLHttpRequest();
@@ -75,15 +77,16 @@ function updateReview(){
         var request = new XMLHttpRequest(); // new HttpRequest instance to send request to server
         request.open("PUT", url, true); //The HTTP method called 'PUT' is used here as we are updating data
         request.setRequestHeader("Content-Type", "application/json");
-        reviews[currentIndex].Review = document.getElementById("editReview").value;
-        //reviews[currentIndex].rating = document.getElementById("editReviewRating").value;
-        reviews[currentIndex].rating = rating;
+        var updateReviewObject = new Object()
+        updateReviewObject.userid = sessionStorage.getItem("user_id");
+        updateReviewObject.review = document.getElementById("editReview").value;
+        updateReviewObject.rating = rating;
         request.onload = function() {
             getAllReviews();
             $('#reviewModal').modal('show');
         };
-        console.log(JSON.stringify(reviews[currentIndex]))
-        request.send(JSON.stringify(reviews[currentIndex]));
+        console.log(JSON.stringify(updateReviewObject))
+        request.send(JSON.stringify(updateReviewObject));
     }
 }
 function newReview(){

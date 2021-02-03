@@ -143,15 +143,43 @@ function displayRestaurants(){ // populate restaurant listings
                 noofreview = reviewsData[loopcount].Review_No;
             }
         }
+        var startinghours = restaurants[i].StartingHours;
+        var endinghours = restaurants[i].EndingHours;
+        var openinghours = "";
+        if (startinghours.includes(",")){
+            startinghours = startinghours.split(",");
+            if (endinghours.includes(",")){
+                endinghours = endinghours.split(",");
+                for (var z = 0; z < startinghours.length; z++){
+                    openinghours += startinghours[z] + " - " + endinghours[z] + " ";
+                }
+            }
+        }
+        else {
+            openinghours += startinghours + " - " + endinghours;
+        }
+        var date = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Sunday";
+        weekday[1] = "Monday";
+        weekday[2] = "Tuesday";
+        weekday[3] = "Wednesday";
+        weekday[4] = "Thursday";
+        weekday[5] = "Friday";
+        weekday[6] = "Saturday";
+        var day = weekday[date.getDay()]; 
         //set stars based on average review rating of restaurant
         var stars = setStars(avgreview);
         //inserts each restaurant listing HTML code onto the page
         var listing = `<div onclick = "gotoRestaurantDetails(this)" style="border-style: solid;
         border-width: 3px; margin-bottom : 10px" item="${restaurants[i].Restaurant_ID}">
                             <img src="${frontimg}" style="width:200px;height:200px;display: inline-block;">
-                            <span>${restaurants[i].Name}</span>
+                            <span class = "restaurantName">${restaurants[i].Name}</span>
+                            <span>Open: ${day} ${openinghours}</span>
                             <span>${stars}</span>
                             <span>${noofreview} Reviews</span>
+                            <span>Tags: ${restaurants[i].Cuisine_Group},${restaurants[i].Category_Group}</span>
+                            <span>${restaurants[i].Location}</span>
                         </div>`;
         document.getElementById("restaurantscontainer").insertAdjacentHTML("beforeend", listing);
         //this inserts the restaurant listing just before the end of the restaurantscontainer closing tag

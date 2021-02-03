@@ -57,12 +57,11 @@ class ReviewsDB
     }
     editReview(request, respond){
         var now = new Date();
-        //for project part 4 havent verify userid
-      /*var reviewObject = new Review(request.params.review_id, request.params.restaurant_id, request.body.userid, request.body.review, request.body.rating, now.toString());
+        var reviewObject = new Review(request.params.review_id, request.params.restaurant_id, request.body.userid, request.body.review, request.body.rating, now.toString());
         var sql = "UPDATE EatWhere.Reviews SET Review = ?, Rating = ?, Date_Posted = NOW() WHERE Review_ID = ? AND User_ID = ?";
-        var values = [reviewObject.getReview(), reviewObject.getRating(), reviewObject.getId(), reviewObject.getUser_ID()];*/
-        var sql = "UPDATE EatWhere.Reviews SET Review = ?, Rating = ?, Date_Posted = NOW() WHERE Review_ID = ?";
-        var values = [request.body.Review, request.body.rating, request.params.review_id];
+        var values = [reviewObject.getReview(), reviewObject.getRating(), reviewObject.getId(), reviewObject.getUser_ID()];
+        //var sql = "UPDATE EatWhere.Reviews SET Review = ?, Rating = ?, Date_Posted = NOW() WHERE Review_ID = ?";
+        //var values = [request.body.Review, request.body.rating, request.params.review_id];
         db.query(sql, values, function (error, result) 
         {
             if(error){
@@ -87,11 +86,10 @@ class ReviewsDB
 
     }
     deleteReview(request, respond){
-        //var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ? AND User_ID = ?";
-        //later change back to userid = ? . This is for project part 3
-        var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ?";
-        //var values = [request.params.review_id, request.body.userid]
-        var values = [request.params.review_id];
+        var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ? AND User_ID = ?";
+        //var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ?";
+        var values = [request.params.review_id, request.body.userid]
+        //var values = [request.params.review_id];
         db.query(sql, values, function (error, result) {
             if(error){
                 throw error;
