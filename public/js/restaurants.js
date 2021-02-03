@@ -300,6 +300,7 @@ function displayRestaurantDetails(){
                             <td>${openinghoursData[i].Start_At.substring(0, openinghoursData[i].Start_At.length - 3)} - ${openinghoursData[i].End_At.substring(0, openinghoursData[i].End_At.length - 3)}</td>
                             </tr>`
             table.insertAdjacentHTML("beforeend", tablecell);// add tablecell before the ending of the table closing tag
+            
         }
     };
     request.send();

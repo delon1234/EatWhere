@@ -1,7 +1,20 @@
 //const e = require("express");
 
 var user;
-
+var picture;
+function encode(element, imgid){
+    console.log("Invoked")
+    var selectedfile = element.files;
+    if (selectedfile.length > 0){
+        var imageFile = selectedfile[0];
+        var fileReader = new FileReader();
+        fileReader.onload = function (fileLoadedEvent) {
+            picture = fileLoadedEvent.target.result;
+            document.getElementById(imgid).src = picture;
+        }
+        fileReader.readAsDataURL(imageFile);
+    }
+}
 function createAccount(){
     var createuser = new Object();
     createuser.user_name = document.getElementById("username").value;
@@ -31,7 +44,7 @@ function createAccount(){
     }
     //check password requirements
     //check if confirm password == password
-    createuser.profile_picture = null;
+    createuser.profile_picture = picture;
     // createuser.profile_picture = document.getElementById("profile picture").value;
     createuser.facebook_account_id = null; //later implement facebook login
     //later implement password checking requirements and checking of values to make sure they are not blank
@@ -95,7 +108,7 @@ function logout(){
     document.getElementById("signup").style.display = "block";
     document.getElementById("logout").style.display = "none";
     document.getElementById("accountdetails").style.display = "none";
-    sessionStorage.clear()
+    sessionStorage.clear();
 }
 function getprofile(){
     var request = new XMLHttpRequest();
@@ -113,11 +126,12 @@ function getprofile(){
         user.mobile_number = userProfile.Mobile_Number;
         user.address = userProfile.Address;
         user.reviews_posted = userProfile.Reviews_Posted;
-        if (userProfile.Profile_Picture == null){
+        if (userProfile.Profile_Picture == null){ //profile picture of user in database is null, set it to avatar img src
             user.profile_picture = "/images/avatar.png";
         }
         else{
-            user.profile_picture = userProfile.Profile_Picture;
+            user.profile_picture = userProfile.Profile_Picture; //set profilepic of user to base64 string of the profile pic 
+            //that the user uploaded previously which is retrieved from database
         }
         console.log(user);
         sessionStorage.setItem("accountdetails", JSON.stringify(user));
@@ -154,9 +168,12 @@ function setEditProfile(){
     }
     document.getElementById("mobile_number").value = user.mobile_number;
     document.getElementById("address").value = user.address;
+    //if user profile picture isnt avatar image where in the database the profile picture field is null
+    if (user.profile_picture != "/images/avatar.png"){
+        document.getElementById("uploaded-file").src = user.profile_picture; //set image to user's previous profile pic
+    }
 }
 function editProfile(){
-    console.log("Invoked")
     //After user edits profile and press submit(called when submit is pressed)
     var userProfileObject = new Object();
     //don't allowing changing of username
@@ -172,12 +189,12 @@ function editProfile(){
     }
     userProfileObject.mobile_number = document.getElementById("mobile_number").value
     userProfileObject.address = document.getElementById("address").value
-    if (document.getElementById("profile_picture").value == "")
+    if (document.getElementById("profile_picture").files.length == 0) //if no profile pic uploaded, set profile pic to null
     {
         userProfileObject.profile_picture = null;
     }
     else{
-        userProfileObject.profile_picture = document.getElementById("profile_picture").value //may change
+        userProfileObject.profile_picture = picture; //else set profile pic to base64 string of uploaded img file
     }
     userProfileObject.token = sessionStorage.getItem("token");
     console.log(userProfileObject);

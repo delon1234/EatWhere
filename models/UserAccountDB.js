@@ -93,9 +93,18 @@ class UserAccountDB
                 var userObject = new UserAccount(request.params.id, request.body.user_name, hash, request.body.email, request.body.firstname, request.body.lastname, 
                     request.body.gender, request.body.mobile_number, request.body.address, 
                     null, request.body.profile_picture, 1, null, null);
-                var sql = "UPDATE EatWhere.User_Accounts SET Password_Hash = ? , FirstName= ?, LastName = ?, Email = ?, Gender = ?, Mobile_Number = ?, Address = ?, Profile_Picture = ? WHERE User_ID = ?";
-                var values = [userObject.getPassword(), userObject.getFirstName(), userObject.getLastName(), userObject.getEmail(), userObject.getGender(), 
-                    userObject.getMobileNumber(), userObject.getAddress(), userObject.getProfilePicture(), userObject.getId()];
+                var sql;
+                var values;
+                if (request.body.profile_picture != null){
+                    sql = "UPDATE EatWhere.User_Accounts SET Password_Hash = ? , FirstName= ?, LastName = ?, Email = ?, Gender = ?, Mobile_Number = ?, Address = ?, Profile_Picture = ? WHERE User_ID = ?";
+                    values = [userObject.getPassword(), userObject.getFirstName(), userObject.getLastName(), userObject.getEmail(), userObject.getGender(), 
+                        userObject.getMobileNumber(), userObject.getAddress(), userObject.getProfilePicture(), userObject.getId()];
+                }
+                else {
+                    sql = "UPDATE EatWhere.User_Accounts SET Password_Hash = ? , FirstName= ?, LastName = ?, Email = ?, Gender = ?, Mobile_Number = ?, Address = ? WHERE User_ID = ?";
+                    values = [userObject.getPassword(), userObject.getFirstName(), userObject.getLastName(), userObject.getEmail(), userObject.getGender(), 
+                        userObject.getMobileNumber(), userObject.getAddress(), userObject.getId()];
+                }
                 db.query(sql, values, function(error, result){
                     if (error){
                         throw error;
