@@ -3,10 +3,21 @@
 var user;
 var picture;
 function encode(element, imgid){
-    console.log("Invoked")
     var selectedfile = element.files;
     if (selectedfile.length > 0){
         var imageFile = selectedfile[0];
+        if (imageFile.size > 2097152) //2MiB for bytes //checks if imagefile size is more than 2MiB
+        {
+            //if imagefile more than 2MiB, alert user and reset file input
+            alert("File size must be under 2MiB");
+            element.value = "";
+            return;
+        }
+        if (!imageFile['type'].includes("image")){ //if uploadedfile is not an image
+            alert("File uploaded must be an image file.");
+            element.value = "";
+            return;
+        }
         var fileReader = new FileReader();
         fileReader.onload = function (fileLoadedEvent) {
             picture = fileLoadedEvent.target.result;

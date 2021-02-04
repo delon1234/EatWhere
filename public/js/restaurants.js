@@ -295,10 +295,22 @@ function displayRestaurantDetails(){
         // Substring from 0 to length - 3 is to get rid of the milliseconds e.g. 11:00:00 changes to 11:00
         // as milliseconds is redundant
         for (var i = 0; i < openinghoursData.length; i++){
-            var tablecell = `<tr>
-                            <td>${openinghoursData[i].Day}</td>
-                            <td>${openinghoursData[i].Start_At.substring(0, openinghoursData[i].Start_At.length - 3)} - ${openinghoursData[i].End_At.substring(0, openinghoursData[i].End_At.length - 3)}</td>
-                            </tr>`
+            if (openinghoursData[i].Start_At == null){ 
+                //checks if starting hours is null, if null, the restaurant is closed for that day.
+                //Also, when starting hours is null,endinghours is also null
+                //this also prevents error as you cant substring null
+                var tablecell = `<tr>
+                                <td>${openinghoursData[i].Day}</td>
+                                <td>Closed</td>
+                                </tr>`
+            }
+            else
+            {
+                var tablecell = `<tr>
+                                <td>${openinghoursData[i].Day}</td>
+                                <td>${openinghoursData[i].Start_At.substring(0, openinghoursData[i].Start_At.length - 3)} - ${openinghoursData[i].End_At.substring(0, openinghoursData[i].End_At.length - 3)}</td>
+                                </tr>`
+            }
             table.insertAdjacentHTML("beforeend", tablecell);// add tablecell before the ending of the table closing tag
             
         }

@@ -12,8 +12,8 @@ var port = 8080;
 var startPage = "index.html";
 
 app.use(express.static("./public"));
-app.use(bodyParser.urlencoded({ extended: true , limit: '2mb'}));
-app.use(bodyParser.json({limit: '2mb'}));
+app.use(bodyParser.urlencoded({ extended: true , limit: '5mb'}));
+app.use(bodyParser.json({limit: '5mb'}));
 
 routeUser.routeUser(app);
 routeRestaurants.routeRestaurants(app);
