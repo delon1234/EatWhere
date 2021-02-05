@@ -37,7 +37,7 @@ class UserAccountDB
     getLoginDetails(request, respond){
         var user_name = request.body.user_name;
         var password = request.body.password;
-        var sql = "SELECT User_ID, CAST(Password_Hash as CHAR) AS password FROM EatWhere.User_Accounts WHERE User_Name = ?";
+        var sql = "SELECT User_ID, CAST(Password_Hash as CHAR) AS password , Confirmed FROM EatWhere.User_Accounts WHERE User_Name = ?";
         //Convert Password_Hash from Binary to CHAR and change the output field name to password
         db.query(sql, [user_name], function(error, result){
             if (error){
@@ -53,6 +53,7 @@ class UserAccountDB
                 {
                     //if there exists a user with the username inputted
                     var userid = result[0].User_ID;
+                    var confirmed = result[0].Confirmed;
                     // Compares plaintext password in json with password_hash stored in database
                     bcrypt.compare(password, result[0].password, function(err, result) {
                         if (result == true){ // if passwords matches/login successful

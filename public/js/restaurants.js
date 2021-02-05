@@ -143,21 +143,6 @@ function displayRestaurants(){ // populate restaurant listings
                 noofreview = reviewsData[loopcount].Review_No;
             }
         }
-        var startinghours = restaurants[i].StartingHours;
-        var endinghours = restaurants[i].EndingHours;
-        var openinghours = "";
-        if (startinghours.includes(",")){
-            startinghours = startinghours.split(",");
-            if (endinghours.includes(",")){
-                endinghours = endinghours.split(",");
-                for (var z = 0; z < startinghours.length; z++){
-                    openinghours += startinghours[z] + " - " + endinghours[z] + " ";
-                }
-            }
-        }
-        else {
-            openinghours += startinghours + " - " + endinghours;
-        }
         var date = new Date();
         var weekday = new Array(7);
         weekday[0] = "Sunday";
@@ -167,7 +152,28 @@ function displayRestaurants(){ // populate restaurant listings
         weekday[4] = "Thursday";
         weekday[5] = "Friday";
         weekday[6] = "Saturday";
-        var day = weekday[date.getDay()]; 
+        var day = weekday[date.getDay()];
+        var startinghours = restaurants[i].StartingHours;
+        var endinghours = restaurants[i].EndingHours;
+        var openinghours = "";
+        if (startinghours != null){
+            openinghours += "Open: " + day + " ";
+            if (startinghours.includes(",")){
+                startinghours = startinghours.split(",");
+                if (endinghours.includes(",")){
+                    endinghours = endinghours.split(",");
+                    for (var z = 0; z < startinghours.length; z++){
+                        openinghours += startinghours[z] + " - " + endinghours[z] + " ";
+                    }
+                }
+            }
+            else {
+                openinghours += startinghours + " - " + endinghours;
+            }
+        }
+        else{
+            openinghours = "Closed";
+        } 
         //set stars based on average review rating of restaurant
         var stars = setStars(avgreview);
         //inserts each restaurant listing HTML code onto the page
@@ -175,7 +181,7 @@ function displayRestaurants(){ // populate restaurant listings
         border-width: 3px; margin-bottom : 10px" item="${restaurants[i].Restaurant_ID}">
                             <img src="${frontimg}" style="width:200px;height:200px;display: inline-block;">
                             <span class = "restaurantName">${restaurants[i].Name}</span>
-                            <span>Open: ${day} ${openinghours}</span>
+                            <span>${openinghours}</span>
                             <span>${stars}</span>
                             <span>${noofreview} Reviews</span>
                             <span>Tags: ${restaurants[i].Cuisine_Group},${restaurants[i].Category_Group}</span>
@@ -232,6 +238,19 @@ function displayRestaurantDetails(){
     request.open("GET", url, true);
     request.onload = function() {
         var openinghoursData = JSON.parse(request.responseText);
+        //implementation of image grid
+        var images = restaurants[item].ImagesCollection.split(",");
+        var temparray;
+        var d,z,chunk = 4;
+        for (d=0,z=images.length; d<z; d+=chunk) {
+            var cell = "";
+            temparray = images.slice(d,d+chunk);
+            for (var temp = 0; temp < temparray.length; temp++){
+                cell += `<img style = "width:200px; height:200px" src = "${temparray[temp]}">`
+            }
+            var rowdata = `<div class = "column">${cell}</div>`;
+            document.getElementById("imagesarea").insertAdjacentHTML("beforeend", rowdata);
+        }
         //google maps implementation
         var infoWindow = new google.maps.InfoWindow();
         var marker, i;
@@ -283,9 +302,9 @@ function displayRestaurantDetails(){
         }
         document.getElementById("review_no").innerHTML = noofreview + " reviews";
         document.getElementById("name").innerHTML = restaurants[item].Name;
-        document.getElementById("location").innerHTML = restaurants[item].Location;
+        document.getElementById("location").innerHTML += restaurants[item].Location;
         document.getElementById("telephone_number").innerHTML += restaurants[item].Telephone_Number;
-        document.getElementById("website").innerHTML += restaurants[item].Website;
+        document.getElementById("website").innerHTML = restaurants[item].Website;
         document.getElementById("website").href = restaurants[item].Website;
         document.getElementById("neighbourhood").innerHTML += restaurants[item].Neighbourhood;
         document.getElementById("cuisine").innerHTML = restaurants[item].Cuisine_Group;
@@ -325,6 +344,7 @@ function getRestaurantsDataForRestaurant(){
         restaurants = restaurantsData[0]; //all data abt restaurant excluding reviews
         reviewsData = restaurantsData[1]; //avg rating and no of reviews of all restaurants
         console.log(reviewsData);
+        console.log(restaurants)
         displayRestaurantDetails();
     };
     request.send();

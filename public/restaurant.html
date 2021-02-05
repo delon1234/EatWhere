@@ -26,37 +26,66 @@
         tr td:first-child{
             padding-right: 20px; /*add spacing between days and opening hours*/
         }
+        @media (min-width: 768px) {
+            .modal-xl {
+            width: 90%;
+            max-width:1200px;
+        }
+}
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAadz3-cruSx_bosVlRq3p6LtegBbsi3xM"
     type="text/javascript"></script>
 </head>
 <body onload="getRestaurantsDataForRestaurant()"><!--get avg and no of reviews-->
-    <h1 id="name"></h1>
-    <div id="tags">Tags: Cuisine(<span id="cuisine"></span>) Category(<span id="category"></span>)</div>
-    <span id = "review_score">Review Score: </span>
-    <span id="review_stars"></span>
-    <span id="review_no"></span>
-    <!-- Tags-->
-    <div id="telephone_number">Telephone Number: </div>
-    <a id="website">Website: </a>
-    <h2>Directions & Opening Hours</h2>
-    <div id="location"></div>
-    <div id="neighbourhood">Neighbourhood: </div>
-    <div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px;">
-        <div id = "my-map"></div>
-        <table id="table">
-            <tr>
-                <th>Day</th>
-                <th>Opening Hours</th>
-            </tr>
-        </table>
-    </div>
-    
-    <!-- Button/hyperlink to see reviews-->
     <!-- Button trigger modal -->
-    <button id = "reviewbutton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal" onclick="getAllReviews()">
-        Reviews
-    </button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    <i class="fas fa-camera"></i><span style="margin-left: 5px;">See all photos</span>
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Images</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row" id = "imagesarea"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="container" id = "restaurantDetails">
+        <h1 id="name"></h1>
+        <div id="tags">Tags: Cuisine(<span id="cuisine"></span>) Category(<span id="category"></span>)</div>
+        <span id = "review_score">Review Score: </span>
+        <span id="review_stars"></span>
+        <span id="review_no"></span>
+        <!-- Tags-->
+        <div id="telephone_number"><i class="fas fa-phone-square-alt"></i> </div>
+        <div>Website: <a id="website" target="_blank"></a></div>
+        <h2>Directions & Opening Hours</h2>
+        <div id="location"><i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i></div>
+        <div id="neighbourhood"><i class="fas fa-city" style="margin-right: 5px;"></i>Neighbourhood: </div>
+        <div class="container-fluid" style="margin-top: 20px; margin-bottom: 20px;">
+            <div id = "my-map"></div>
+            <table id="table">
+                <tr>
+                    <th>Day</th>
+                    <th>Opening Hours</th>
+                </tr>
+            </table>
+        </div>
+    
+        <!-- Button/hyperlink to see reviews-->
+        <!-- Button trigger modal -->
+        <button id = "reviewbutton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#reviewModal" onclick="getAllReviews()">
+            Reviews
+        </button>
+    </div>
     
     <!-- Modal -->
     <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -80,6 +109,8 @@
     <!-- Include post and edit review modal-->
     <div w3-include-html = "post-review-modal.html"></div>
     <div w3-include-html = "edit-review-modal.html"></div>
+
+    
 </body>
 <script src="js/w3.js"></script>
 <script>

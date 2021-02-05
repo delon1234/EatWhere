@@ -120,6 +120,7 @@ function logout(){
     document.getElementById("logout").style.display = "none";
     document.getElementById("accountdetails").style.display = "none";
     sessionStorage.clear();
+    window.location.replace("index.html");
 }
 function getprofile(){
     var request = new XMLHttpRequest();
