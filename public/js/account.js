@@ -92,11 +92,11 @@ function login(){
             window.alert("Login is not successful, please try again.");
         }
         else if (tokenandId.result == "Not Confirmed"){
-            window.alert("You have not confirmed your email.")
+            window.alert("You have not confirmed your account. Please confirm your account before logging in.")
         }
         else {
-            $("#loginModal").modal("hide");
-            window.alert("Login was successful!");
+            $("#loginModal").modal("hide"); 
+            window.alert("Login was successful! Welcome, " + document.getElementById("username").value + "!");
             id = tokenandId.userid;
             sessionStorage.setItem("user_id", id);
             // need to store token somewhere as well like in the browser cookies

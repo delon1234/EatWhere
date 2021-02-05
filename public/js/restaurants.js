@@ -178,14 +178,16 @@ function displayRestaurants(){ // populate restaurant listings
         var stars = setStars(avgreview);
         //inserts each restaurant listing HTML code onto the page
         var listing = `<div onclick = "gotoRestaurantDetails(this)" style="border-style: solid;
-        border-width: 3px; margin-bottom : 10px" item="${restaurants[i].Restaurant_ID}">
+        border-width: 3px; margin-bottom : 10px; position: relative; padding:20px" item="${restaurants[i].Restaurant_ID}">
                             <img src="${frontimg}" style="width:200px;height:200px;display: inline-block;">
-                            <span class = "restaurantName">${restaurants[i].Name}</span>
-                            <span>${openinghours}</span>
-                            <span>${stars}</span>
-                            <span>${noofreview} Reviews</span>
-                            <span>Tags: ${restaurants[i].Cuisine_Group},${restaurants[i].Category_Group}</span>
-                            <span>${restaurants[i].Location}</span>
+                            <span style = "position:absolute; margin-left:20px; top:20px "class = "restaurantName">${restaurants[i].Name}</span>
+                            <span style = "position:absolute; right: 5px">${openinghours}</span>
+                            <div style = "position: absolute; left: 220px;top: 60px;margin-left: 20px;">
+                                <span >${stars}</span>
+                                <span >${noofreview} Reviews</span>
+                                <span>Tags: ${restaurants[i].Cuisine_Group},${restaurants[i].Category_Group}</span>
+                            </div>
+                            <span style="margin-left:20px">${restaurants[i].Location}</span>
                         </div>`;
         document.getElementById("restaurantscontainer").insertAdjacentHTML("beforeend", listing);
         //this inserts the restaurant listing just before the end of the restaurantscontainer closing tag

@@ -1,6 +1,7 @@
 body {
     padding-top: 6%;
     text-align: center;
+    font-family: 'Roboto', sans-serif;
 }
 .searchbar {
     position: relative;

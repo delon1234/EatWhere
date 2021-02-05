@@ -16,11 +16,14 @@
     <script src="js/app.js"></script>
     <script src="js/checktoken.js"></script>
     <link rel="stylesheet" href="css/mystyles.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" type="image/jpg" href="favicon.png"/>
     <style>
         body{
             padding-top: 70px;
             text-align: left;
+            font-family: "Roboto", sans-serif;
         }
         #filters{
             position:fixed;
@@ -33,17 +36,28 @@
         .header-filter{
             margin-bottom: 20px;
             margin-top: 20px;
+            font-weight: bold;
         }
         .restaurantName{
             font-weight: bold;
             font-size: 1.5rem;
+        }
+        .modal-body{
+            text-align: center;
+        }
+        .filter{
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .fa-star, .fa-star-half-alt{
+            color: red;
         }
     </style>
 </head>
 <body>
     <div w3-include-html = "top-navigation.html"></div>
     <div id = "filters">
-        <div>Filters</div>
+        <div class="filter">Filters</div>
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="Open Now" id="opennow">
             <label class="form-check-label" for="opennow">Open Now</label>
