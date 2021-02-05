@@ -30,7 +30,7 @@
       </div>
   </div>
 </nav>
-<!-- Modal -->
+<!-- Modal login-->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -45,7 +45,7 @@
           <form>
           <input class = "logininput" name="username"id="username" placeholder="Username">
           <input class = "logininput" name="password"id="password" placeholder="Password">
-          <a class="align" href="">Forget Password?</a>
+          <a class="align" data-toggle="modal" data-target="#resetPasswordModal" data-dismiss="modal">Forget Password?</a>
           <button type="button" class = "btn btn-outline-dark" onclick="login()" style="position: absolute; right: 100px">Login</button>
           <div class="line"><span>or</span></div>
           <!-- Facebook login button-->
@@ -53,6 +53,37 @@
           </form>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal to reset password-->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Forget Your Password?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>We will send an email to the email address associated with your username with a link for you to reset your password.</p>
+        <form>
+          <div class="form-group">
+            <label for="resetusername">Username</label>
+            <input type="text" class="form-control" id="resetusername" placeholder="Username" maxlength = "40" autofocus required>
+          </div>
+          <div class="form-group">
+            <label for="resetEmail">Email Address</label>
+            <input type="text" class="form-control" id="resetEmail" placeholder="Email Address" maxlength = "40" autofocus required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submitEmailToResetPassword()">Reset Password</button>
+      </div>
     </div>
   </div>
 </div>

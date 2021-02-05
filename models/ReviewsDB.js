@@ -38,7 +38,16 @@ class ReviewsDB
                 throw error;
             }
             else{
-                respond.json(result);
+                //respond.json(result);
+                var sql = "UPDATE EatWhere.User_Accounts SET Reviews_Posted = Reviews_Posted + 1 WHERE User_ID = ?"
+                db.query(sql, request.body.userid, function(error, result){
+                    if(error){
+                        throw error;
+                    }
+                    else{
+                        respond.json(result);
+                    }
+                });
                 //exclude review images for now. It works btw but havent implement for website
                 /*reviewid = result.insertId;
                 var insertImage = "INSERT INTO EatWhere.reviewimages (Review_ID, Review_Image) VALUES (?,?)";
@@ -88,14 +97,26 @@ class ReviewsDB
     deleteReview(request, respond){
         var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ? AND User_ID = ?";
         //var sql = "DELETE FROM EatWhere.Reviews WHERE Reviews.Review_ID= ?";
-        var values = [request.params.review_id, request.body.userid]
+        var userid = request.body.userid;
+        var values = [request.params.review_id, request.body.userid];
         //var values = [request.params.review_id];
         db.query(sql, values, function (error, result) {
             if(error){
                 throw error;
             }
             else{
-                respond.json(result);
+                if(result.affectedRows != 0)
+                {
+                    var sql = "UPDATE EatWhere.User_Accounts SET Reviews_Posted = Reviews_Posted - 1 WHERE User_ID = ?";
+                    db.query(sql, userid, function(error, result){
+                        if(error){
+                            throw error;
+                        }
+                        else{
+                            respond.json(result);
+                        }
+                    });
+                }
             }
           });
     }

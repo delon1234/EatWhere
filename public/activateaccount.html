@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Account</title>
+</head>
+<script>
+    function activateaccount(){
+    // aft user clicks on url
+    var request = new XMLHttpRequest();
+    var emailtoken = window.location.href.split("?")[1];
+    var url = "/activateaccount/" + emailtoken;
+    request.open("PUT", url, true);
+    request.send();
+    request.onload = function(){
+        var result = JSON.parse(request.responseText);
+        if (result.result == "Success"){
+            window.alert("Your account has been successfully confirmed!");
+        }
+        else if (result.result == "Invalid token!"){
+            window.alert("Your account has not been successfully confirmed.");
+            console.log("Invalid");
+        }
+        window.location.replace("http://127.0.0.1:8080/index.html");
+    }
+}
+</script>
+<body onload="activateaccount()">
+    
+</body>
+</html>

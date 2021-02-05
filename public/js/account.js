@@ -91,6 +91,9 @@ function login(){
         if (tokenandId.result == "Invalid"){
             window.alert("Login is not successful, please try again.");
         }
+        else if (tokenandId.result == "Not Confirmed"){
+            window.alert("You have not confirmed your email.")
+        }
         else {
             $("#loginModal").modal("hide");
             window.alert("Login was successful!");
@@ -258,5 +261,46 @@ function deleteacc(){
     request.onload = function(){
         sessionStorage.clear();
         window.location.replace("index.html");
+    }
+}
+function submitEmailToResetPassword(){
+    var request = new XMLHttpRequest();
+    var username = document.getElementById("resetusername").value;
+    var email = document.getElementById("resetEmail").value;
+    var url = "/resetpassword/" + username;
+    request.open("POST", url, true);
+    request.setRequestHeader("Content-Type", "application/json");
+    var objectToSend = new Object();
+    objectToSend.email = email;
+    request.send(JSON.stringify(objectToSend));
+    request.onload = function(){
+        var result = JSON.parse(request.responseText);
+        if (result.result == "Invalid account"){
+            window.alert("There is no such account found!");
+        }
+        else{
+            window.alert("The request to reset password has been sent. You will receive an email soon.");
+        }
+    }
+}
+function resetPasswordRequest(){
+    var request = new XMLHttpRequest();
+    var usernametoken = window.location.href.split("?")[1];
+    console.log(usernametoken);
+    var url = "/resetpassword/" + usernametoken;
+    request.open("PUT", url, true);
+    request.setRequestHeader("Content-Type", "application/json");
+    var passwordObject = new Object();
+    passwordObject.password = document.getElementById("resetPassword").value;
+    request.send(JSON.stringify(passwordObject));
+    request.onload = function(){
+        var result = JSON.parse(request.responseText);
+        if (result.result == "Success"){
+            window.alert("You have successfully resetted your password!.");
+            window.location.replace("index.html");
+        }
+        else{
+            window.alert("Your attempt to reset your password has failed!");
+        }
     }
 }

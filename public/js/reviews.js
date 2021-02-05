@@ -63,10 +63,13 @@ function deleteReviewRequest(element) {
         var delete_review_url = "/restaurants/" + restaurant_id + "/reviews/" + reviews[item].Review_ID;
         var request = new XMLHttpRequest();
         request.open("DELETE", delete_review_url, true);
+        request.setRequestHeader("Content-Type", "application/json");
         request.onload = function() {
             getAllReviews();
         };
-        request.send();
+        var object = new Object();
+        object.userid = sessionStorage.getItem("user_id");
+        request.send(JSON.stringify(object));
     }
 }
 function updateReview(){

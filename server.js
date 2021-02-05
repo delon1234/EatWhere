@@ -6,6 +6,7 @@ const routeUser = require("./routes/routeUser");
 //Code for EatWhere
 const routeRestaurants = require("./routes/routeRestaurants");
 const routeReviews = require("./routes/routeReviews");
+
 var app = express();
 var host = "127.0.0.1";
 var port = 8080;
@@ -34,3 +35,4 @@ var server = app.listen(port, host, function() {
 
     console.log("Example app listening at http://%s:%s", host, port);
 });
+
