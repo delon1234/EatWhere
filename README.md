@@ -29,4 +29,6 @@ JWT to secure edit acc, confirm acc and forget password endpoints<br />
 Passwords are hashed using bcrypt and stored in database. Login will hash the entered password and query database for match of acc<br />
 Dynamic construction of SQL statements for filtering of restaurants using JS<br />
 
+Preview of the restaurant review website with search capabilities
+![image](https://user-images.githubusercontent.com/62348245/185554414-5b1b0f95-6a16-4fac-8ecc-bbde18ba53a7.png)
 
